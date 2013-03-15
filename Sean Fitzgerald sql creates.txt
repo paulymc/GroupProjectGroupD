@@ -1,3 +1,5 @@
+create database DVDMangement;
+
 
 DROP TABLE customer;
 
