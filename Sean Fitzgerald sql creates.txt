@@ -1,0 +1,65 @@
+create database DVDMangement;
+
+
+DROP TABLE customer;
+
+CREATE TABLE Customer (
+custId INT(10) AUTO_INCREMENT PRIMARY KEY,
+custAddr VARCHAR(50) NOT NULL,
+custPhone INT(10) UNSIGNED,
+custEmail VARCHAR(20),
+custName VARCHAR(25) NOT NULL,
+custPass VARCHAR(15) NOT NULL,
+);
+
+Drop TABLE stock;
+
+CREATE TABLE Stock (
+stockId INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+dvdYear INT(4) UNSIGNED,
+dvdTitle VARCHAR(20),
+dvdQuant INT(2) UNSIGNED,
+dvdDirector VARCHAR(25),
+dvdRentFee INT(3) UNSIGNED
+);
+
+DROP TABLE Dvd;
+
+CREATE TABLE Dvd (
+dvdId INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+dvdState CHAR(1) CHECK (dvdState IN ('A', 'B', 'O', 'R')),
+stockId INT(10) UNSIGNED,
+FOREIGN KEY (stockId) REFERENCES Stock(stockId)
+);
+
+
+DROP TABLE Rented;
+
+CREATE TABLE Rented (
+rentId INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+startDate DATETIME,
+dueDate DATETIME,
+custId INT(10),
+dvdId INT(10) UNSIGNED,
+FOREIGN KEY (custId) REFERENCES Customer(custId),
+FOREIGN KEY (dvdId) REFERENCES Dvd(dvdId)
+);
+
+
+
+
+
+
+-----------------------------------------------
+Possible		
+-----------------------------------------------
+DROP TABLE Employee;
+
+CREATE TABLE Employee(
+empId INT(10) AUTO_INCREMENT UNSIGNED NOT NULL,
+empName CHAR(25),
+accessLevel CHAR(3),
+empPassword CHAR(15),
+PRIMARY KEY(empId)
+CHECK (accessLevel 'MNG', 'SAL')
+);
