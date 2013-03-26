@@ -111,7 +111,11 @@ public class GUI extends JFrame implements ActionListener {
 		}
 		if(Event == Account)
 		{
-			JOptionPane.showMessageDialog(null, "Account not implemented Yet!");
+			//JOptionPane.showMessageDialog(null, "Account not implemented Yet!");
+			Frame.setVisible(false);
+			setContentPane(new AccDetails("Hello World").pane);
+			
+			
 		}
 		if(Event == Stock)
 		{

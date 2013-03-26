@@ -1,3 +1,4 @@
+// this is a GUI for adding a new customer.
 
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import javax.swing.WindowConstants;
 
 public class AccDetails extends JFrame
 {
-
+	Container pane = new JPanel();
 // Constructor for frame 
 
 	public AccDetails (String myTitle) 
@@ -26,7 +27,6 @@ public class AccDetails extends JFrame
 
 	private Container createPane() 
         {
-		Container pane = new JPanel();
 		JPanel q1 = new JPanel();
 		pane.setLayout(new BorderLayout());
 		q1.setLayout(new GridLayout(10,2));

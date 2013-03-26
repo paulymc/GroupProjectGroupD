@@ -2,7 +2,7 @@ public class Control
 {
 	public static void main (String[] args)
 	{
-		//new Password("Hello World");
-		new AccDetails("Hello World");
+		new Password("Hello World");
+		//new AccDetails("Hello World");
 	}
 }
