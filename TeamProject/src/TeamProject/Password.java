@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,8 +16,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Password extends JFrame
+public class Password extends JFrame implements ActionListener
 {
+	
+	JButton Login = new JButton("Login");
+	
 	public Password (String myTitle) 
 	{
 		super (myTitle);
@@ -46,9 +51,8 @@ public class Password extends JFrame
 		Title.setFont(fancyFont);
 		
 		JPanel buttonpanel = new JPanel();
-		buttonpanel.setLayout(new BorderLayout());
-		JButton Login = new JButton("Login");
-		buttonpanel.add(Login, BorderLayout.WEST);
+		
+		buttonpanel.add(Login);
 		
 		w1.add(usernamelabel);
 		w1.add(username);
@@ -59,8 +63,22 @@ public class Password extends JFrame
 		w2.add(w3);
 		w2.add(buttonpanel);
 		pane.add(Title, BorderLayout.NORTH);
-		pane.add(w2, BorderLayout.WEST);
+		pane.add(w2, BorderLayout.CENTER);
+		
+		
+		Login.addActionListener(this);
 		
 		return pane;
     }
+	
+public void actionPerformed(ActionEvent e) {
+		
+		Object boom = e.getSource();
+		
+		if(boom == Login)
+		{
+			new AccDetails("DVD Rentel");
+			setVisible(false);
+		}
+}
 }

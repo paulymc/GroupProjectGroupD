@@ -1,7 +1,10 @@
 package TeamProject;
 
 import java.awt.*;
-import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,8 +12,10 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
-public class AccDetails extends JFrame
+public class AccDetails extends JFrame implements ActionListener
 {
+	JButton Details = new JButton("Edit Details");
+	JButton CheckVid = new JButton ("Check Video");
 
 // Constructor for frame 
 
@@ -27,82 +32,92 @@ public class AccDetails extends JFrame
 	private Container createPane() 
         {
 		Container pane = new JPanel();
-		JPanel q1 = new JPanel();
 		pane.setLayout(new BorderLayout());
-		q1.setLayout(new GridLayout(10,2));
-		JPanel q2 = new JPanel();
-		q2.setLayout(new GridLayout(1,4));
-		JPanel q3 = new JPanel();
-		JPanel q4 = new JPanel();
-		q4.setLayout(new GridLayout(6,0));
-		JPanel q5 = new JPanel();
-		JPanel q6 = new JPanel();
-		JPanel q7 = new JPanel();
+		pane.setBackground(Color.GRAY);
 		
-		JLabel AccDetails = new JLabel ("Account Details");
+		JPanel AccDetpanel = new JPanel();
+		AccDetpanel.setBackground(Color.RED);
+		
+		JPanel Accinfo = new JPanel();
+		Accinfo.setLayout(new GridLayout(10,2));
+		Accinfo.setBorder(BorderFactory.createLineBorder(Color.GRAY,30));
+		
+		JPanel RentStatus = new JPanel();
+		RentStatus.setLayout(new GridLayout(1,4));
+		
+		JPanel RentHistory = new JPanel();
+		RentHistory.setBorder(BorderFactory.createLineBorder(Color.GRAY,30));
+		RentHistory.setLayout(new GridLayout(6,0));
+		RentHistory.setBackground(Color.RED);
+		
+		JPanel AmountDue = new JPanel();
+		JPanel Movies = new JPanel();
+		JPanel rentedOn = new JPanel();
+		JPanel returnedOn = new JPanel();
+		
+		JLabel AccDetails = new JLabel ("  Account Details");
 		Font fancyFont = new Font ("Serif",Font.BOLD,24);
 		AccDetails.setFont(fancyFont);
 		
-		JLabel AccId = new JLabel ("Account ID:");
+		JLabel AccId = new JLabel ("  Account ID:");
 		JTextField AccIdField = new JTextField (10);
 		
-		JLabel Name = new JLabel ("Name:");
+		JLabel Name = new JLabel ("  Name:");
 		JTextField NameField = new JTextField (10);
 		
-		JLabel PhNum = new JLabel ("Phone Number:");
+		JLabel PhNum = new JLabel ("  Phone Number:");
 		JTextField PhField = new JTextField (10);
 		
-		JLabel Email = new JLabel ("Email:");
+		JLabel Email = new JLabel ("  Email:");
 		JTextField EmailField = new JTextField (10);
 		
-		JLabel AddLine1 = new JLabel ("Address Line 1:");
+		JLabel AddLine1 = new JLabel ("  Address Line 1:");
 		JTextField Add1Field = new JTextField (10);
 		
-		JLabel AddLine2 = new JLabel ("Address Line 2:");
+		JLabel AddLine2 = new JLabel ("  Address Line 2:");
 		JTextField Add2Field = new JTextField (10);
 		
-		JLabel County = new JLabel ("County:");
+		JLabel County = new JLabel ("  County:");
 		JTextField CountyField = new JTextField (10);
 		
-		JLabel DateJoin = new JLabel ("Date Joined:");
+		JLabel DateJoin = new JLabel ("  Date Joined:");
 		JTextField DateField = new JTextField (10);
 		
-		JLabel Branch = new JLabel ("Branch:");
+		JLabel Branch = new JLabel ("  Branch:");
 		JTextField BranchField = new JTextField (10);
 
-		q1.add(AccId);
-		q1.add(AccIdField);
+		Accinfo.add(AccId);
+		Accinfo.add(AccIdField);
 		
-		q1.add(Name);
-		q1.add(NameField);
+		Accinfo.add(Name);
+		Accinfo.add(NameField);
 		
-		q1.add(PhNum);
-		q1.add(PhField);
+		Accinfo.add(PhNum);
+		Accinfo.add(PhField);
 		
-		q1.add(Email);
-		q1.add(EmailField);
+		Accinfo.add(Email);
+		Accinfo.add(EmailField);
 		
-		q1.add(AddLine1);
-		q1.add(Add1Field);
+		Accinfo.add(AddLine1);
+		Accinfo.add(Add1Field);
 
-		q1.add(AddLine2);
-		q1.add(Add2Field);
+		Accinfo.add(AddLine2);
+		Accinfo.add(Add2Field);
 		
-		q1.add(County);
-		q1.add(CountyField);
+		Accinfo.add(County);
+		Accinfo.add(CountyField);
 		
-		q1.add(DateJoin);
-		q1.add(DateField);
+		Accinfo.add(DateJoin);
+		Accinfo.add(DateField);
 		
-		q1.add(Branch);
-		q1.add(BranchField);
+		Accinfo.add(Branch);
+		Accinfo.add(BranchField);
 		
 		JPanel buttonpanel = new JPanel();
 		buttonpanel.setLayout(new BorderLayout());
-		JButton Details = new JButton("Edit Details");
 		buttonpanel.add(Details, BorderLayout.WEST);
 	
-		q1.add(buttonpanel);
+		Accinfo.add(buttonpanel);
 
 		JLabel RentHis = new JLabel ("Rental History");
 		RentHis.setFont(fancyFont);
@@ -117,8 +132,8 @@ public class AccDetails extends JFrame
 		MovieCheck.setFont(fancyFont);
 		
 		JTextField MovieField = new JTextField();
-		MovieField.setPreferredSize(new Dimension(100,50));
-		JButton CheckVid = new JButton ("Check Video");
+		MovieField.setPreferredSize(new Dimension(150,30));
+		
 		
 		JLabel OutDate = new JLabel ("CheckOut Date:");
 		JTextField OutDateField = new JTextField (10);
@@ -126,33 +141,54 @@ public class AccDetails extends JFrame
 		JLabel InDate = new JLabel ("Return Date:");
 		JTextField InDateField = new JTextField (10);
 		
-		q3.add(Status);
-		q3.add(StatusField);
+		AmountDue.add(Status);
+		AmountDue.add(StatusField);
 		
-		q3.add(AmDue);
-		q3.add(AmDueField);
-		q2.add(q3);
+		AmountDue.add(AmDue);
+		AmountDue.add(AmDueField);
+		RentStatus.add(AmountDue);
 		
-		q5.add(MovieField);
-		q5.add(CheckVid);
+		Movies.add(MovieField);
+		Movies.add(CheckVid);
 		
-		q6.add(OutDate);
-		q6.add(OutDateField);
+		rentedOn.add(OutDate);
+		rentedOn.add(OutDateField);
 		
-		q7.add(InDate);
-		q7.add(InDateField);
+		returnedOn.add(InDate);
+		returnedOn.add(InDateField);
 		
-		q4.add(RentHis);
-		q4.add(q2);
-		q4.add(MovieCheck);
-		q4.add(q5);
-		q4.add(q6);
-		q4.add(q7);
+		RentHistory.add(RentHis);
+		RentHistory.add(RentStatus);
+		RentHistory.add(MovieCheck);
+		RentHistory.add(Movies);
+		RentHistory.add(rentedOn);
+		RentHistory.add(returnedOn);
+		AccDetpanel.add(AccDetails);
 		
-		pane.add(q1, BorderLayout.WEST);
-		pane.add(AccDetails,BorderLayout.NORTH);
-		pane.add(q4, BorderLayout.EAST);
+		pane.add(Accinfo, BorderLayout.WEST);
+		pane.add(AccDetpanel,BorderLayout.NORTH);
+		pane.add(RentHistory, BorderLayout.EAST);
+		
+		Details.addActionListener(this);
+		CheckVid.addActionListener(this);
 
 		return pane;
 	}
+	
+public void actionPerformed(ActionEvent e) {
+		
+		Object fire = e.getSource();
+		
+		if(fire == Details)
+		{
+			new Password("DVD Rentel");
+			setVisible(false);
+		}
+		
+		if(fire == CheckVid)
+		{
+			new Password("Rentel");
+			setVisible(false);
+		}
+}
 }
