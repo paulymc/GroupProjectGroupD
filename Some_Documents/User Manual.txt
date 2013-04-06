@@ -1,0 +1,63 @@
+User Manual For DVD Rental System.
+
+15TH MARCH 2013
+COPYRIGHT - THE CODEFATHERS 2013
+
+CONTENTS
+--------
+
+1. Introduction 
+2. Login 
+3. Menu screen and navigation.
+4. Adding New Employees.
+5. Searching and Editing stock. 
+6. 
+
+1. Introduction 
+----------------
+
+ Welcome to the DVD Rental management system. This software is designed to allow employees login and search, edit and check Dvd's, stock and Members of the Rental shop syored in the database. 
+ 
+2. LOGIN
+--------
+
+ Each employee is assigned a username and a password. Depending on the login details certain access will be given to the system. For managers and people who have a higher priority access they will have complete access to the system, including the right to edit stock and add new employees. Employees who have a lower priority level access can only check members and stock and exdit rental details. 
+ 
+3. MENU SCREEN AND NAVIGATION
+-----------------------------
+
+ Once the user has logged in they will be greeted with the main menu screen. This screen displays all the options available to the user. Including options such as:
+
+	Settings: Used for adding new employees and options for hard of hearing and/or sight. 
+	Member: Displays all the details for a customer/member in the database. Can be edited. 
+	Stock: Displays stock and details of the stock. Only the manager can edit this information.
+	Reservation: Additional feature to allow employees to check reservations customers have made and update them depending if collected. 
+    Exit: Exit the System. 
+	
+4.SETTINGS
+----------
+
+  Settings screen used for adding new employees or changing access privilages for existing employees under the add user button. 
+  Font sizes and read out text funtion can also be set using the corresponding buttons in the settings menu. 
+  
+5.MEMBERS
+---------
+
+  Used to search for existing customers or add new customers to the system. When searching for a customer enter the name in the search bar and rental histroy as well as contact details will be displayed. 
+  
+  When adding a new customer all the relevant customer details will have be entered. 
+  
+6.STOCK
+-------
+
+  Used to check the stock of the certain dvds or all dvds in the store. Can add or delete stock depending if the manager is logged in. 
+  
+7.RESERVATIONS
+--------------
+
+  Used to check reservations of dvds made by the customer before hand. This will check the reservation details, such as what was reserved, who reserved it and reservation number to identify reservation transaction. These reservations can be updated or deleted depending if the customer has picked up the dvd reserved before the expirary date. 
+  
+8.EXIT SCREEN.
+--------------
+
+  Used to logout of the system and goes back to the login screen. 
