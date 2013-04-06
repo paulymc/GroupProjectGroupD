@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.lang.ClassNotFoundException;
 
 
@@ -21,6 +22,7 @@ public class Model
 	
 		Connection DBconnection = null;
 		Statement DBstatement = null;
+		ResultSet st_details = null;
 	
 	/*constructor: this will run when it is model created and will assign 
 	the username and password to the private variables upon creation of the class*/
@@ -67,7 +69,7 @@ public class Model
 		}*/	
 	}
 	
-	private void closeDB()
+	public void closeDB()
 	{
 		if(DBconnection != null)												//and this closes the DBconnection after it has been used
 		{
@@ -83,11 +85,9 @@ public class Model
 		}
 	}
 	
-	private void closeStm()
+	public void closeStm()
 	{
 		//this handles the closing of the connections to the database when finished
-		
-		
 		if(DBstatement != null)     											//this block closes the DBstatement connection if it has been used
 		{
 			System.out.println("Closing statement.....");
@@ -98,6 +98,21 @@ public class Model
 					System.out.println("Error : " +  ignore.getMessage());
 				}
 			System.out.println("Statement closed");
+		}
+	}
+	
+	public void closeResultSet()
+	{
+		if(st_details != null)     											//this block closes the DBstatement connection if it has been used
+		{
+			System.out.println("Closing Result set.....");
+			
+			try{	st_details.close();  }
+				catch(SQLException ignore)
+				{
+					System.out.println("Error : " +  ignore.getMessage());
+				}
+			System.out.println("Result Set closed");
 		}
 	}
 	
@@ -530,6 +545,39 @@ public class Model
 		
 		//View DvD movie details
 		
+		public ResultSet DisplayStock()
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Prepair to display all stock");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Executing cursor query");
+					st_details = DBstatement.executeQuery("select * from Stock");
+					/*System.out.println("Attempting output to console");
+					while(st_details.next())
+					{
+						int id = st_details.getInt("stockId");
+						String name = st_details.getString("dvdTitle");
+						System.out.println("Id : "+id+"	Name: "+name);
+					}*/
+					
+					System.out.println("output complete");
+					//DBstatement.execute("");
+					System.out.println("Attempting cursor passing");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+		
+			return st_details;
+		}
+		
+		
 		public void getMovie(int stockID) // searchs by id number
 		{
 			connectDb(); //connect to the database
@@ -610,43 +658,37 @@ public class Model
 		}
 		
 		//Update Stock details
-		public void UpStockDe()
+		public void UpStockDe(int StockId,int year,String name,String dir,int qua ,int refee)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Prepairing to update the stock details");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
-			}
-			
-			catch(SQLException error)
-			{
-				System.out.println("Error : " +  error.getMessage());
-			}
-			
-			closeStm();//closes the statement
-			
-			closeDB();// closes the database when finished
-			
-		}
-		
-		public void UpQuant(int StockId)//update the quantity of the DVD in stock
-		{
-			connectDb(); //connect to the database
-			
-			try
-			{
-					System.out.println("");
-					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					
+					//note these can be surrounded in if statements that check if the strings entered are not blanks
+					System.out.println("Atempting year update");
+					DBstatement.execute("UPDATE Stock SET dvdYear = "+year+" WHERE stockId = "+StockId);
+					System.out.println("Year update success");
+					
+					System.out.println("Atempting Dvd Name update");
+					DBstatement.execute("UPDATE Stock SET dvdTitle = '"+name+"' WHERE stockId = "+StockId);
+					System.out.println("DvdTitle update success");
+					
+					System.out.println("Atempting Director name update");
+					DBstatement.execute("UPDATE Stock SET dvdDirector = '"+dir+"' WHERE stockId = "+StockId);
+					System.out.println("Director name update success");
+					
+					System.out.println("Atempting Quantity update");
+					DBstatement.execute("UPDATE Stock SET dvdQuant = '"+qua+"' WHERE stockId = "+StockId);
+					System.out.println("Quantity update success");
+					
+					System.out.println("Atempting rental fee update");
+					DBstatement.execute("UPDATE Stock SET dvdRentFee = '"+refee+"' WHERE stockId = "+StockId);
+					System.out.println("Rental fee update success");
+					
+					System.out.println("Update successful");
 			}
 			
 			catch(SQLException error)

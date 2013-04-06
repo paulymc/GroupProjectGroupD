@@ -4,6 +4,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+//this is for the select results
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Stock extends JFrame implements ActionListener{
 	Container Screen = new JPanel();
 	JLabel name = new JLabel("Name:");
@@ -110,11 +114,69 @@ public class Stock extends JFrame implements ActionListener{
 		if(Event == searcgx)
 		{
 			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			Model St_search = new Model("Emp", "pass");
+			//needs work
+			ResultSet cursor = St_search.DisplayStock();
+			
+			
+			System.out.println("displaying cursor");
+			try {
+				while(cursor.next())
+				{
+					
+					String name,director;
+						int id = cursor.getInt("stockId");
+						name = cursor.getString("dvdTitle");
+						int year = cursor.getInt("dvdYear"); 
+						director = cursor.getString("dvdDirector");
+						int quant = cursor.getInt("dvdQuant");
+						int rentfee = cursor.getInt("dvdRentFee");
+						System.out.println("Id : "+id+"	Name: "+name+"	year:"+year+" 	director:"+director+"		quantity:"+quant+"		rentfee:"+rentfee);
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			System.out.println("closing stock cursor");
+			St_search.closeResultSet();
+			try {
+				cursor.close();
+	
+				System.out.println("successfully closed");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			St_search.closeStm();//closes the statement
+			
+			St_search.closeDB();// closes the database when finished
+			
 		}
 		if(Event == Edit)
 		{
 			
 			//Code for Editing the stock implemented here, i.e UPDATE STOCK
+			
+			String U_Name,U_Director,U_Gen;
+			int U_Quant,stock_id;
+			
+			stock_id = Integer.parseInt(ID1.getText());
+			
+			Model Up_Stock = new Model("Emp", "pass");
+			
+			
+			
+			U_Name = Name1.getText();
+			U_Director = Director1.getText();
+			U_Quant=Integer.parseInt(Quantity1.getText());//converts whats in the string text to an integer
+			//U_Gen=Genre1.getText();
+			
+			
+			Up_Stock.UpStockDe(stock_id, 2020, U_Name, U_Director, U_Quant,7);
+			
+			
 		}
 		if(Event== Remove)
 		{
