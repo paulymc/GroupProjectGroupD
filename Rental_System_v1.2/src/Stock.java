@@ -118,8 +118,12 @@ public class Stock extends JFrame implements ActionListener{
 		}
 		if(Event== Remove)
 		{
-			//Code for Removing a stock item implemented here, i.e DELETE STOCK
+			int stock_id = Integer.parseInt(ID1.getText());
 			
+			//Code for Removing a stock item implemented here, i.e DELETE STOCK
+			Model Re_stock = new Model("Emp", "pass");
+			
+			Re_stock.DelStock(stock_id);
 		}
 		if(Event == Add)
 		{

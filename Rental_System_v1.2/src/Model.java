@@ -661,18 +661,17 @@ public class Model
 		}
 		
 		//delete stock
-		public void DelStock()
+		public void DelStock(int del_s_id)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Prepairing to delete stock");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					System.out.println("Attempting stock delete statement");
+					DBstatement.execute("DELETE FROM Stock WHERE stockId = "+del_s_id+"");
+					System.out.println("Statement successful");
 			}
 			
 			catch(SQLException error)
