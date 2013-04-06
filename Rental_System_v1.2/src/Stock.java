@@ -124,6 +124,28 @@ public class Stock extends JFrame implements ActionListener{
 		if(Event == Add)
 		{
 			//Code for Adding an item to a stock implemented here, i.e INSERT STOCK
+			String A_Name,A_Director,A_Gen;
+			int A_Quant;
+			
+			A_Name = Name1.getText();
+			A_Director = Director1.getText();
+			A_Quant=Integer.parseInt(Quantity1.getText());//converts whats in the string text to an integer
+			A_Gen=Genre1.getText();
+			
+			
+			//Note their is no genra in the DVD database.
+			//also there is no DVD year or dvd rent fee in the gui's either.
+			//Also there needs to be a employee login and a place to pass in the username and passwords in the gui.
+			//Also Id is autoincremented so it isnt needed for this.
+			//Also there needs to be a textfield to add in the rental fee.
+			
+			Model Stock_add = new Model("Emp", "pass");
+			
+			Stock_add.NewStock(A_Name, 2012, A_Director, 5,A_Quant);
+			
+			//Stock_add.NewStock(A_Name, "2012", A_Director, 5,A_Quant);//this passes the data to the model to pass to the database
+			
+			
 			
 		}
 		

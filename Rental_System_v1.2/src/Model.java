@@ -40,8 +40,8 @@ public class Model
 			Class.forName("com.mysql.jdbc.Driver"); // this is connecting the java project to the driver Note very important
 			System.out.println("Connection Successful");
 			
-			System.out.println("Connecting to Database: CodeTest");
-			DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/codetest" , username,password);
+			System.out.println("Connecting to Database: DvdManagement");
+			DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dvdmanagement" , username,password);
 			System.out.println("Connection Successful");
 			
 		/*	System.out.println("Create dvd table");
@@ -582,18 +582,20 @@ public class Model
 		
 		//Add to stock
 		
-		public void NewStock()
+		public void NewStock(String d_name,int D_year,String D_director, int rentFee,int qant)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Connecting to database");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					System.out.println("Prepairing to execute database statement");
+				//	DBstatement.execute("INSERT INTO Stock(dvdYear, dvdTitle, dvdDirector, dvdrentFee) VALUES(1999, 'The Saints', 'W', 5)");
+					DBstatement.execute("INSERT INTO Stock(dvdYear, dvdTitle,dvdQuant, dvdDirector, dvdrentFee) VALUES("+D_year+",'"+d_name+"',"+qant+",'"+D_director+"', " +rentFee+")"); 
+					
+					//DBstatement.execute("INSERT INTO Stock(dvdYear, dvdTitle, dvdDirector, dvdrentFee) VALUES("+D_year+",'A','test', 6)"); 
+					System.out.println("Successfully completed");
 			}
 			
 			catch(SQLException error)
