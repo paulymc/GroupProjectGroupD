@@ -19,7 +19,9 @@ import javax.swing.WindowConstants;
 public class createAcc extends JFrame implements ActionListener
 {
 	JButton Confirm = new JButton("Confirm Details");
-	JButton Cancel = new JButton ("Cancel");
+	JButton Cancel = new JButton("Cancel");
+	
+	JTextField NameField,PhField, EmailField,Add1Field,Add2Field,CountyField,DateField,BranchField;
 	
 	public createAcc (String myTitle) 
 	{
@@ -51,28 +53,28 @@ public class createAcc extends JFrame implements ActionListener
 	JTextField AccIdField = new JTextField (10);
 	
 	JLabel Name = new JLabel ("  Name:");
-	JTextField NameField = new JTextField (10);
+	NameField = new JTextField (10);
 	
 	JLabel PhNum = new JLabel ("  Phone Number:");
-	JTextField PhField = new JTextField (10);
+	PhField = new JTextField (10);
 	
 	JLabel Email = new JLabel ("  Email:");
-	JTextField EmailField = new JTextField (10);
+	 EmailField = new JTextField (10);
 	
 	JLabel AddLine1 = new JLabel ("  Address Line 1:");
-	JTextField Add1Field = new JTextField (10);
+	Add1Field = new JTextField (10);
 	
 	JLabel AddLine2 = new JLabel ("  Address Line 2:");
-	JTextField Add2Field = new JTextField (10);
+	Add2Field = new JTextField (10);
 	
 	JLabel County = new JLabel ("  County:");
-	JTextField CountyField = new JTextField (10);
+	CountyField = new JTextField (10);
 	
 	JLabel DateJoin = new JLabel ("  Date Joined:");
-	JTextField DateField = new JTextField (10);
+	DateField = new JTextField (10);
 	
 	JLabel Branch = new JLabel ("  Branch:");
-	JTextField BranchField = new JTextField (10);
+	BranchField = new JTextField (10);
 
 	Accinfo.add(AccId);
 	Accinfo.add(AccIdField);
@@ -121,14 +123,44 @@ public void actionPerformed(ActionEvent e) {
 		
 		if(fire == Confirm)
 		{
-			new Password("DVD Rentel");
-			setVisible(false);
+			String name,Ph_number,email,address,County,date_joined,Branch;
+			
+			name = NameField.getText();
+			Ph_number = PhField.getText();
+			email = EmailField.getText();
+			address = Add1Field.getText() +" "+ Add2Field.getText();
+			County =CountyField.getText();
+			date_joined = DateField.getText();
+			Branch = BranchField.getText();
+			
+			System.out.println("Name:" +name);
+			System.out.println("Phone number:" +Ph_number);
+			System.out.println("Email:" + email);
+			System.out.println("Address: " +address);
+			System.out.println("County:"+County);
+			System.out.println("Date joined:" +date_joined );
+			System.out.println("Branch:" +Branch);
+			/*
+				Put the model class call here
+			*/
+			
+			//new Password("DVD Rentel");
+			//setVisible(false);
 		}
 		
 		if(fire == Cancel)
 		{
-			new AccDetails("DVD Rentel");
-			setVisible(false);
+			NameField.setText("");
+			PhField.setText("");
+			EmailField.setText("");
+			Add1Field.setText("");
+			Add2Field.setText("");
+			CountyField.setText("");
+			DateField.setText("");
+			BranchField.setText("");
+			
+			//new AccDetails("DVD Rentel");
+			//setVisible(false);
 		}
 }
 

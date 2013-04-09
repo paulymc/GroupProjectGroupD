@@ -18,6 +18,12 @@ import javax.swing.WindowConstants;
 
 public class Password extends JFrame implements ActionListener
 {
+
+	String Username,Pass;
+
+	JPasswordField password;
+	
+	JTextField username;
 	
 	JButton Login = new JButton("Login");
 	
@@ -29,6 +35,7 @@ public class Password extends JFrame implements ActionListener
 		setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
 		setContentPane(createPane());
 		setVisible(true);
+	
 	}
 	
 	private Container createPane() 
@@ -42,9 +49,9 @@ public class Password extends JFrame implements ActionListener
 		
 		JLabel usernamelabel = new JLabel("Username:");
 		JLabel passwordlabel = new JLabel("password:");
-		JTextField username = new JTextField(10);
+		username = new JTextField(10);
 		//username.setPreferredSize(new Dimension(5,5));
-		JPasswordField password = new JPasswordField(10);
+	    password = new JPasswordField(10);
 		//password.setPreferredSize(new Dimension(10,10));
 		JLabel Title = new JLabel("Uber-Vision");
 		Font fancyFont = new Font ("Serif",Font.BOLD,72);
@@ -71,13 +78,18 @@ public class Password extends JFrame implements ActionListener
 		return pane;
     }
 	
+@SuppressWarnings("deprecation")
 public void actionPerformed(ActionEvent e) {
 		
 		Object boom = e.getSource();
 		
 		if(boom == Login)
 		{
+			Username = username.getText();
+			Pass = password.getText();
+			System.out.println("Username:"+Username+"	Password:"+Pass);
 			new AccDetails("DVD Rentel");
+			//new createAcc("customer");
 			setVisible(false);
 		}
 }

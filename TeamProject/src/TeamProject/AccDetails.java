@@ -175,20 +175,25 @@ public class AccDetails extends JFrame implements ActionListener
 		return pane;
 	}
 	
-public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) 
+ {
 		
 		Object fire = e.getSource();
 		
 		if(fire == Details)
 		{
-			new Password("DVD Rentel");
-			setVisible(false);
+			System.out.println("username: "+  +"	Password:"+);
+			
+			//new Password("DVD Rentel");
+			//setVisible(false);
 		}
 		
 		if(fire == CheckVid)
 		{
+			
+			
 			new Password("Rentel");
 			setVisible(false);
 		}
-}
+ }
 }
