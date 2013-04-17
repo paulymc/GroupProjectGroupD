@@ -1,10 +1,11 @@
 
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,24 +15,31 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Password extends JFrame 
+public class login extends JFrame implements ActionListener
 {
+
+	String Username,Pass;
+
+	JPasswordField password;
 	
+	JTextField username;
 	Container pane = new JPanel();
+	JButton Login = new JButton("Login");
 	
-	public Password (String myTitle) 
+	public login (String myTitle) 
 	{
-		super (myTitle);
-		setSize(600,600);
+		super ("Login");
+		setSize(800,600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation (EXIT_ON_CLOSE);
 		setContentPane(createPane());
 		setVisible(true);
+	
 	}
 	
-	private Container createPane() 
+	public Container createPane() 
     {
-		Container pane = new JPanel();
+		
 		JPanel w1 = new JPanel();
 		JPanel w3 = new JPanel();
 		JPanel w2 = new JPanel();
@@ -40,18 +48,17 @@ public class Password extends JFrame
 		
 		JLabel usernamelabel = new JLabel("Username:");
 		JLabel passwordlabel = new JLabel("password:");
-		JTextField username = new JTextField(10);
+		username = new JTextField(10);
 		//username.setPreferredSize(new Dimension(5,5));
-		JPasswordField password = new JPasswordField(10);
+	    password = new JPasswordField(10);
 		//password.setPreferredSize(new Dimension(10,10));
 		JLabel Title = new JLabel("Uber-Vision");
 		Font fancyFont = new Font ("Serif",Font.BOLD,72);
 		Title.setFont(fancyFont);
 		
 		JPanel buttonpanel = new JPanel();
-		buttonpanel.setLayout(new BorderLayout());
-		JButton Login = new JButton("Login");
-		buttonpanel.add(Login, BorderLayout.WEST);
+		
+		buttonpanel.add(Login);
 		
 		w1.add(usernamelabel);
 		w1.add(username);
@@ -62,8 +69,27 @@ public class Password extends JFrame
 		w2.add(w3);
 		w2.add(buttonpanel);
 		pane.add(Title, BorderLayout.NORTH);
-		pane.add(w2, BorderLayout.WEST);
+		pane.add(w2, BorderLayout.CENTER);
+		
+		
+		Login.addActionListener(this);
 		
 		return pane;
     }
+	
+@SuppressWarnings("deprecation")
+public void actionPerformed(ActionEvent e) {
+		
+		Object boom = e.getSource();
+		
+		if(boom == Login)
+		{
+			Username = username.getText();
+			Pass = password.getText();
+			System.out.println("Username:"+Username+"	Password:"+Pass);
+			new GUI("Menu Screen");
+			this.setVisible(false);
+		}
 }
+}
+
