@@ -1,9 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-
 //this is for the select results
 import java.sql.ResultSet;
 import java.sql.SQLException;

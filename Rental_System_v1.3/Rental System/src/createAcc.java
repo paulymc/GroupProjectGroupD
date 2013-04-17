@@ -143,6 +143,9 @@ public void actionPerformed(ActionEvent e) {
 			/*
 				Put the model class call here
 			*/
+			Model newCust = new Model("test", "test");
+			
+			newCust.NewCust(name, address, Ph_number, email);
 			
 			//new Password("DVD Rentel");
 			//setVisible(false);

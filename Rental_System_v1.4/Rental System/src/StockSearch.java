@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class StockSearch extends JFrame implements ActionListener {
 	    Container StockSScreen = new JPanel();
@@ -93,6 +97,47 @@ public class StockSearch extends JFrame implements ActionListener {
 		
 		if(Event == Searched)
 		{
+			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			Model St_search = new Model("Emp", "pass");
+			//needs work
+			ResultSet cursor = St_search.DisplayStock();
+			
+			
+			System.out.println("displaying cursor");
+			try {
+				while(cursor.next())
+				{
+					
+					String name,director;
+						int id = cursor.getInt("stockId");
+						name = cursor.getString("dvdTitle");
+						int year = cursor.getInt("dvdYear"); 
+						director = cursor.getString("dvdDirector");
+						int quant = cursor.getInt("dvdQuant");
+						int rentfee = cursor.getInt("dvdRentFee");
+						System.out.println("Id : "+id+"	Name: "+name+"	year:"+year+" 	director:"+director+"		quantity:"+quant+"		rentfee:"+rentfee);
+						
+						Films.se
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			System.out.println("closing stock cursor");
+			St_search.closeResultSet();
+			try {
+				cursor.close();
+	
+				System.out.println("successfully closed");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			St_search.closeStm();//closes the statement
+			
+			St_search.closeDB();// closes the database when finished
 			
 		}
 		if(Event == cancel)

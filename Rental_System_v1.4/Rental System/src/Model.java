@@ -5,6 +5,7 @@
  */
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.DriverManager;
@@ -21,6 +22,7 @@ public class Model
 	
 		Connection DBconnection = null;
 		Statement DBstatement = null;
+		ResultSet st_details = null;
 	
 	/*constructor: this will run when it is model created and will assign 
 	the username and password to the private variables upon creation of the class*/
@@ -67,7 +69,7 @@ public class Model
 		}*/	
 	}
 	
-	private void closeDB()
+	public void closeDB()
 	{
 		if(DBconnection != null)												//and this closes the DBconnection after it has been used
 		{
@@ -83,7 +85,7 @@ public class Model
 		}
 	}
 	
-	private void closeStm()
+	public void closeStm()
 	{
 		//this handles the closing of the connections to the database when finished
 		
@@ -98,6 +100,21 @@ public class Model
 					System.out.println("Error : " +  ignore.getMessage());
 				}
 			System.out.println("Statement closed");
+		}
+	}
+	
+	public void closeResultSet()
+	{
+		if(st_details != null)     											//this block closes the DBstatement connection if it has been used
+		{
+			System.out.println("Closing Result set.....");
+			
+			try{	st_details.close();  }
+				catch(SQLException ignore)
+				{
+					System.out.println("Error : " +  ignore.getMessage());
+				}
+			System.out.println("Result Set closed");
 		}
 	}
 	
@@ -418,6 +435,39 @@ public class Model
 		//DVD table
 		
 		//View DVD table details
+		
+		public ResultSet DisplayStock()
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Prepair to display all stock");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Executing cursor query");
+					st_details = DBstatement.executeQuery("select * from Stock");
+					/*System.out.println("Attempting output to console");
+					while(st_details.next())
+					{
+						int id = st_details.getInt("stockId");
+						String name = st_details.getString("dvdTitle");
+						System.out.println("Id : "+id+"	Name: "+name);
+					}*/
+					
+					System.out.println("output complete");
+					//DBstatement.execute("");
+					System.out.println("Attempting cursor passing");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+		
+			return st_details;
+		}
+		
 		public void getDVD()
 		{
 		

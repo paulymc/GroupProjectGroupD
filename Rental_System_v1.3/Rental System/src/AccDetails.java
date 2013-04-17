@@ -17,7 +17,7 @@ public class AccDetails extends JFrame implements ActionListener
 	JButton Details = new JButton("Edit Details");
 	JButton CheckVid = new JButton ("Check Video");
 	JButton newAcc = new JButton("New Account");
-Container pane = new JPanel();
+	Container pane = new JPanel();
 // Constructor for frame 
 
 	public AccDetails (String myTitle) 
@@ -26,12 +26,12 @@ Container pane = new JPanel();
 		setSize(800,800);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
-		setContentPane(createPane());
-		setVisible(true);
+		setContentPane(pane());
+		setVisible(false);
 		setResizable(false);
 	}
 
-	private Container createPane() 
+	public Container pane() 
         {
 		
 		pane.setLayout(new BorderLayout());
