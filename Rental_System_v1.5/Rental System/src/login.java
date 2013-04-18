@@ -78,7 +78,8 @@ public class login extends JFrame implements ActionListener
     }
 	
 @SuppressWarnings("deprecation")
-public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e)
+	{
 		
 		Object boom = e.getSource();
 		
@@ -87,9 +88,29 @@ public void actionPerformed(ActionEvent e) {
 			Username = username.getText();
 			Pass = password.getText();
 			System.out.println("Username:"+Username+"	Password:"+Pass);
-			new GUI("Menu Screen");
-			this.setVisible(false);
+			
+			System.out.println("Testing the connection to the database with the username and password");
+			Model u_test = new Model(Username, Pass);
+			
+	
+				if (u_test.Pass_check())
+				{
+					System.out.println("Success");
+					new GUI("Menu Screen",Username,Pass);
+					//new AccDetails("DVD Rentel");
+					//new createAcc("customer");
+					//new Password("testing");
+					setVisible(false);
+				}
+				else
+				{
+					System.out.println("failed password");
+					username.setText("");
+					password.setText(""); 
+				}
 		}
+	}
 }
-}
+
+		
 

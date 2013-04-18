@@ -24,8 +24,11 @@ public class GUI extends JFrame implements ActionListener {
 		JPanel Frame = new JPanel();
 	static int size = 32;
 	Font Font1 = new Font("Aerial",Font.BOLD,size);	//font for the title
+	
+	//To hold the username and password for the database
+	String username,password;
 		
-	public GUI(String gui)
+	public GUI(String gui,String user,String pass)
 	{
 		
 		super(gui);
@@ -36,7 +39,8 @@ public class GUI extends JFrame implements ActionListener {
 		setJMenuBar(createMenu());
 		setVisible(true);
 		setResizable(false);							//resizing not allowed 
-		
+		username = user;
+		password = pass;		
 	}
 
 	public Container createContentFrame() 
@@ -108,11 +112,11 @@ public class GUI extends JFrame implements ActionListener {
 		
 		if(Event == Settings)
 		{ 
-			new Settings("Settings");
+			new Settings("Settings",username,password);
 		}
 		if(Event == Account)
 		{	
-			new AccDetails("Account Details");
+			new AccDetails("Account Details",password,username);
 		}
 		if(Event == Stock)
 		{				

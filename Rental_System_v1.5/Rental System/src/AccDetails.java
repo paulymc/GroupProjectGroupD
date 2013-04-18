@@ -3,6 +3,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -36,7 +38,13 @@ public class AccDetails extends JFrame implements ActionListener
 	JTextField DateField = new JTextField (10);
 	JTextField BranchField = new JTextField (10);
 
-	public AccDetails (String myTitle) 
+
+	//To hold the username and password for the database
+	String username,password;
+	
+	int id ;//for the update functionality
+	
+	public AccDetails (String myTitle,String user,String pass) 
 	{
 		super (myTitle);
 		setSize(800,600);
@@ -45,6 +53,12 @@ public class AccDetails extends JFrame implements ActionListener
 		setContentPane(Pane());
 		setVisible(true);
 		setResizable(false);
+
+		username = user;
+		password = pass;
+		
+	//System.out.println("Username is : " + username + "Password is: "+ password );
+		
 	}
 
 	public Container Pane() 
@@ -243,10 +257,14 @@ public class AccDetails extends JFrame implements ActionListener
 		}
 		if(fire == returnq)
 		{
+			Model up_cust = new Model(username,password);	 
+			up_cust.UpdateCust(id,NameField.getText(),PhField.getText(),EmailField.getText(),Add1Field.getText());
 			this.setVisible(false);
 		}
 		if(fire == save)
 		{
+			Model up_cust = new Model(username,password);	 
+			up_cust.UpdateCust(id,NameField.getText(),PhField.getText(),EmailField.getText(),Add1Field.getText());
 			 AccIdField.setEditable(false);
 		     NameField.setEditable(false); 			 
 		     PhField.setEditable(false); 
@@ -260,6 +278,38 @@ public class AccDetails extends JFrame implements ActionListener
 		if(fire == Rental)
 		{
 			new RentalHistory("Rental History");
+		}
+		
+		if(fire == searching)
+		{
+			Model dis_cust = new Model(username, password);
+			ResultSet res_cust = dis_cust.getCust(seacrh.getText());
+			try {
+				while(res_cust.next())
+				{
+					int ph;
+					id = res_cust.getInt("custId");
+					String name = res_cust.getString("custName");
+					String email,add;
+					ph =res_cust.getInt("custPhone");
+					email =res_cust.getString("custEmail");
+					add =res_cust.getString("custAddr");
+					System.out.println("Id : "+id+"	Name: "+name);
+					
+				     NameField.setText(name); 			 
+				     PhField.setText(""+ph);
+					 EmailField.setText(email);
+					 Add1Field.setText(add);  
+					
+					
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			dis_cust.closeStm();
+			dis_cust.closeResultSet();
+			dis_cust.closeDB();
 		}
 		
  }

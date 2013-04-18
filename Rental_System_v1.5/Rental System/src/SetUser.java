@@ -15,9 +15,12 @@ public class SetUser extends JFrame implements ActionListener{
 	JTextField name = new JTextField();
 	JTextField role = new JTextField();
 	
-	JCheckBox manager = new JCheckBox();
+	JCheckBox manager = new JCheckBox("Manager");
 	
-	public SetUser(String User)
+	//To hold the username and password for the database
+		String username,password;
+	
+	public SetUser(String User,String user,String pass)
 	{
 		super("Set User");
 		setSize(800,600);
@@ -26,6 +29,8 @@ public class SetUser extends JFrame implements ActionListener{
 		setContentPane(userpane());
 		setResizable(false);
 		setVisible(true);
+		username = user;
+		password = pass;
 	}
 
 	public Container userpane()
@@ -67,6 +72,13 @@ public class SetUser extends JFrame implements ActionListener{
 		}
 		if(action == save)
 		{
+			Boolean flag = manager.isSelected();
+			System.out.println("Username is : " + username + "Password is: "+ password );
+			Model new_User = new Model(username,password);
+			
+			System.out.println("check box is :" + flag);
+			new_User.NewEmp(name.getText(),role.getText(),flag);
+			
 			JOptionPane.showMessageDialog(null, "New User Added");
 		}
 		if(action == cancel)

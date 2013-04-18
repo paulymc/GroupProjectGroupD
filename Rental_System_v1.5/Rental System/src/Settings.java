@@ -15,7 +15,10 @@ public class Settings extends JFrame implements ActionListener {
 	//JButton SetAudio = new JButton("Audio");
 	JButton Return = new JButton("Return");
 	
-	public Settings(String settings)
+	//To hold the username and password for the database
+		String username,password;
+	
+	public Settings(String settings,String user,String pass)
 	{
 		super(settings);
 		setSize(800,600);
@@ -25,6 +28,8 @@ public class Settings extends JFrame implements ActionListener {
 		//setJMenuBar(createMenu());
 		setVisible(true);
 		setResizable(false);
+		username = user;
+		password = pass;		
 	}
 	
 	public Container SettingScreen()
@@ -76,7 +81,7 @@ public class Settings extends JFrame implements ActionListener {
 		
 		if(Event == SetUsers)//Action Listener that allows to add and set the users of the system
 		{
-			new SetUser("Set User");
+			new SetUser("Set User",username,password);
 		}
 		
 	}
