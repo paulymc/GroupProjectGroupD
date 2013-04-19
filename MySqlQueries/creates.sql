@@ -1,0 +1,45 @@
+CREATE TABLE Customer (
+custId INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+custAddr CHAR(50) NOT NULL,
+custPhone INT(10) UNSIGNED,
+custEmail CHAR(20)
+custName CHAR(25),
+custPass CHAR(15),
+PRIMARY KEY(custId)
+);
+
+CREATE TABLE Stock (
+stockId INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+dvdYear INT(4) UNSIGNED,
+dvdTitle CHAR(20),
+dvdQuant INT(2) UNSIGNED,
+dvdDirector CHAR(25),
+dvdRentFee INT(3) UNSIGNED,
+PRIMARY KEY(stockId)
+);
+
+CREATE TABLE Dvd (
+dvdId INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+dvdState CHAR(1),
+FOREIGN KEY (stockId) REFERENCES Stock(stockId),
+PRIMARY KEY (dvdId),
+CHECK (dvdState 'A', 'B', 'O', 'R')
+);
+
+CREATE TABLE Rented (
+rentId INT(10) UNSIGNED AUTO_INCREMENT NOT NULL,
+startDate DATE,
+dueDate DATE,
+FOREIGN KEY (custId) REFERENCES Customer(custId),
+FOREIGN KEY (dvdId) REFERENCES Dvd(dvdId),
+PRIMARY KEY (rentId)
+);
+
+CREATE TABLE Employee(
+empId INT(10) AUTO_INCREMENT UNSIGNED NOT NULL,
+empName CHAR(25),
+accessLevel CHAR(3),
+empPassword CHAR(15),
+PRIMARY KEY(empId)
+CHECK (accessLevel 'MNG', 'SAL')
+);

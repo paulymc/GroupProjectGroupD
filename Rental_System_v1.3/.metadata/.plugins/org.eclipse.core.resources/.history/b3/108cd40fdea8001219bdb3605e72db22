@@ -1,0 +1,18 @@
+import junit.framework.TestCase;
+
+
+public class Model_test extends TestCase
+{
+	public Model_test(String testName)
+	{
+		super(testName);
+	}
+
+	/*public static void main(String[] args) 
+	{
+	 Model test = new Model("root","");// test test is the username and password
+	 
+	 test.NewEmp("username","password"); //this creates the username and password for the employee user 
+	}*/
+
+}

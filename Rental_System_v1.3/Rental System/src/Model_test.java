@@ -1,6 +1,18 @@
+import junit.framework.TestCase;
 
-public class Model_test
+
+public class Model_test extends TestCase
 {
+	public Model_test(String testName)
+	{
+		super(testName);
+	}
+	
+	public void testGetMovie()
+	{
+		Model test = new Model("", "");
+		
+	}
 
 	/*public static void main(String[] args) 
 	{
