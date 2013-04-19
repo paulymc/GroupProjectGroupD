@@ -14,14 +14,17 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Password extends JFrame
+public class Password extends JFrame 
 {
+	
+	Container pane = new JPanel();
+	
 	public Password (String myTitle) 
 	{
 		super (myTitle);
-		setSize(800,400);
+		setSize(600,600);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation (EXIT_ON_CLOSE);
 		setContentPane(createPane());
 		setVisible(true);
 	}

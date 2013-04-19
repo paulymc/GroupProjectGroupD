@@ -63,7 +63,9 @@ public class Settings extends JFrame implements ActionListener {
 		if(Event == Return)
 		{
 			
-			System.exit(1);
+			setVisible(false);
+		//	new GUI("Menu Screen");
+		  //System.exit(1);
 			
 		}
 		if(Event == SetFont)//Action Listener to change the font size

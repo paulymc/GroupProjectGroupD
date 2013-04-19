@@ -106,7 +106,7 @@ public class Stock extends JFrame implements ActionListener{
 			
 			
 			
-			setContentPane(new GUI("S").Frame);
+			//setContentPane(new GUI("S").Frame);
 			Screen.setVisible(false);
 		}		
 		if(Event == searcgx)

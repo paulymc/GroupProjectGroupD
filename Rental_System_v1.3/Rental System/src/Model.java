@@ -31,6 +31,45 @@ public class Model
 		password  = pass;
 	}
 
+	/*
+	 * The purpose of Pass_check is for the login screen 
+	 * If the Username and password are correct then
+	 * the connection to the database will be successful 
+	 * and true will be returned
+	 * However if a username password is incorrect the database 
+	 * will not be connected to and an error will be thrown.
+	 * This is when the catch statement will return false.
+	 * 
+	 */
+	
+	public Boolean Pass_check()
+	{
+		 try
+			{
+				System.out.println("Connecting to Driver.....");
+				Class.forName("com.mysql.jdbc.Driver"); // this is connecting the java project to the driver Note very important
+				System.out.println("Connection Successful");
+				
+				System.out.println("Connecting to Database: teamp \n password:" + password);
+				
+				DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teamp" , username,password);
+				System.out.println("Connection Successful");
+				
+			}
+			catch(ClassNotFoundException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+				//System.out.println("Username or password is incorrect");
+			}
+		  catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+				System.out.println("Username or password is incorrect");
+				return false;
+			}
+		return true;
+	}
+
 	private void connectDb()
 	{
 	  
@@ -40,8 +79,8 @@ public class Model
 			Class.forName("com.mysql.jdbc.Driver"); // this is connecting the java project to the driver Note very important
 			System.out.println("Connection Successful");
 			
-			System.out.println("Connecting to Database: CodeTest");
-			DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/codetest" , username,password);
+			System.out.println("Connecting to Database: teamp");
+			DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teamp" , username,password);
 			System.out.println("Connection Successful");
 			
 		/*	System.out.println("Create dvd table");

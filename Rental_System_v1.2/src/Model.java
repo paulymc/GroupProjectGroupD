@@ -123,7 +123,7 @@ public class Model
 			try{
 			System.out.println("Create new user");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute("CREATE USER " + Un + " IDENTIFIED BY  '" + Pw + "'" ); //Creates the user
+					//DBstatement.execute("CREATE USER " + Un + " IDENTIFIED BY  '" + Pw + "'" ); //Creates the user
 					System.out.println("User " + Un + " has been created");
 					DBstatement.execute("GRANT SELECT, INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON codetest.* TO " + Un + " IDENTIFIED BY '" + Pw + "'"); //Grants employee privileges to the user  NOTE: need exact privileges for the DVDManagement system.
 					System.out.println("User " + Un + " has Employee level privileges granted");
@@ -204,7 +204,7 @@ public class Model
 			{
 					System.out.println("");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
+					DBstatement.execute(" "); 
 					System.out.println("");
 					//DBstatement.execute("");
 					System.out.println("");

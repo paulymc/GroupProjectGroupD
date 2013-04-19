@@ -84,7 +84,11 @@ public class StockSearch extends JFrame implements ActionListener {
 		
 		return StockSScreen;
 	}
+
+	
+	
 	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		
 		Object Event = e.getSource();
@@ -109,6 +113,11 @@ public class StockSearch extends JFrame implements ActionListener {
 			//setContentPane(s.Screen);
 			//StockSScreen.revalidate();
 		}
+		if(Event == details)
+		{
+			
+		}
+		
 		
 	}
 	

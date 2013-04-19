@@ -87,7 +87,7 @@ public void actionPerformed(ActionEvent e) {
 			Username = username.getText();
 			Pass = password.getText();
 			System.out.println("Username:"+Username+"	Password:"+Pass);
-			new GUI("Menu Screen");
+			//new GUI("Menu Screen");
 			//new AccDetails("DVD Rentel");
 			//new createAcc("customer");
 			setVisible(false);

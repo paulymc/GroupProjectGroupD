@@ -18,6 +18,7 @@ public class GUI extends JFrame implements ActionListener {
 	//menus declared
 	//JMenu menu = new JMenu("Files");
 	JMenu menu2 = new JMenu("Help");
+	String password,username;
 	
 	JMenuItem About = new JMenuItem("About");
 	JMenuItem Instruction = new JMenuItem("Instruction");
@@ -25,7 +26,7 @@ public class GUI extends JFrame implements ActionListener {
 	static int size = 32;
 	Font Font1 = new Font("Aerial",Font.BOLD,size);	//font for the title
 		
-	public GUI(String gui)
+	public GUI(String gui,String user,String pass)
 	{
 		
 		super(gui);
@@ -36,7 +37,8 @@ public class GUI extends JFrame implements ActionListener {
 		setJMenuBar(createMenu());
 		setVisible(true);
 		setResizable(false);							//resizing not allowed 
-		
+		password= pass;
+		username = user;
 	}
 	
 	public Container createContentFrame() 
@@ -111,8 +113,7 @@ public class GUI extends JFrame implements ActionListener {
 		
 		if(Event == Settings)
 		{ 
-			
-			
+	
 			Frame.setVisible(false);
 			setContentPane(new Settings("s").settingscreen);
 		}
