@@ -96,7 +96,7 @@ public class Model
 			System.out.println("Error : " +  error.getMessage());
 		}
 		
-	  catch(SQLException error)
+	  	catch(SQLException error)
 		{
 			System.out.println("Error : " +  error.getMessage());
 		}
@@ -577,7 +577,7 @@ public class Model
 			{
 					System.out.println("");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
+					DBstatement.execute("SELECT * FROM Stock WHERE stockId = " + stockID); 
 					System.out.println("");
 					//DBstatement.execute("");
 					System.out.println("");

@@ -2,7 +2,11 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.internal.QuickAccess">
 		<item value="1025" key="dialogWidth"/>
+<<<<<<< HEAD
 		<item value="525" key="dialogHeight"/>
+=======
+		<item value="526" key="dialogHeight"/>
+>>>>>>> ef178fe6f1cc0c3c1e73bc715a3b51c782c3f6b3
 		<list key="orderedProviders">
 		</list>
 		<list key="textArray">
@@ -12,4 +16,14 @@
 		<list key="textEntries">
 		</list>
 	</section>
+<<<<<<< HEAD
+=======
+	<section name="ImportExportAction">
+		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
+		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.jst.j2ee.internal"/>
+		</list>
+	</section>
+>>>>>>> ef178fe6f1cc0c3c1e73bc715a3b51c782c3f6b3
 </section>
