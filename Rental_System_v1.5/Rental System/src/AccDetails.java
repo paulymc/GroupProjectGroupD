@@ -105,36 +105,37 @@ public class AccDetails extends JFrame implements ActionListener
 		DateField.setEditable(false);
 		BranchField.setEditable(false);
 		
-		Accinfo.add(seacrh);
-		Accinfo.add(searching);
+		Accinfo.add(seacrh); //add  search textfield
+		Accinfo.add(searching); //add search buttn
 		searching.setToolTipText("Search for Customer by name");
 		
-		Accinfo.add(AccId);
-		Accinfo.add(AccIdField);
+		Accinfo.add(AccId); //add accid label to accinfo panel
+		Accinfo.add(AccIdField); //add accid textfield to accinfo panel
 		
-		Accinfo.add(Name);
-		Accinfo.add(NameField);
+		Accinfo.add(Name); //add Name label to accinfo panel
+		Accinfo.add(NameField);//add Name textfield to accinfo panel
 		
-		Accinfo.add(PhNum);
-		Accinfo.add(PhField);
+		Accinfo.add(PhNum); //add PhNum label to accinfo panel
+		Accinfo.add(PhField);//add PhNum textfield to accinfo panel
 		
-		Accinfo.add(Email);
-		Accinfo.add(EmailField);
+		Accinfo.add(Email); //add Email label to accinfo panel
+		Accinfo.add(EmailField);//add Email textfield to accinfo panel
 		
-		Accinfo.add(AddLine1);
-		Accinfo.add(Add1Field);
+		Accinfo.add(Email); //add AddLine1 label to accinfo panel
+		Accinfo.add(Add1Field);//add Email textfield to accinfo panel
 
-		Accinfo.add(AddLine2);
-		Accinfo.add(Add2Field);
+		Accinfo.add(AddLine2); //add AddLine2 label to accinfo panel
+		Accinfo.add(Add2Field);//add AddLine2 textfield to accinfo panel
 		
-		Accinfo.add(County);
-		Accinfo.add(CountyField);
+		Accinfo.add(County); //add County label to accinfo panel
+		Accinfo.add(CountyField);//add County textfield to accinfo panel
 		
-		Accinfo.add(DateJoin);
-		Accinfo.add(DateField);
+		Accinfo.add(DateJoin); //add DateJoin label to accinfo panel
+		Accinfo.add(DateField);//add DateJoin textfield to accinfo panel
 		
-		Accinfo.add(Branch);
-		Accinfo.add(BranchField);
+		Accinfo.add(Branch); //add Branch label to accinfo panel
+		Accinfo.add(BranchField);//add Branch textfield to accinfo panel
+		
 		Accinfo.add(Rental);
 		Accinfo.add(Delete);
 		
