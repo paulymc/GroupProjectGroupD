@@ -843,11 +843,11 @@ public class Model
 			//gets the date
 			Calendar now = Calendar.getInstance();//date
 			String Current_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
-			
+			System.out.println("testing Current date:"+Current_date);
 			 now.add(Calendar.DATE, days);
 			
 			 String return_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
-			 
+			 System.out.println("testing return date:"+return_date); 
 			 
 			 //now to get the dvdid
 			 
@@ -861,12 +861,13 @@ public class Model
 				DBstatement = DBconnection.createStatement();
 				System.out.println("Executing cursor query");
 				st_details = DBstatement.executeQuery("select * from dvd where stockId = "+stockId+" and dvdState = 'A' ");//works tested on database
-			
+				 System.out.println("Execution success");
 				st_details.next();
 				dvdid = st_details.getInt("dvdId");
-				
+				 System.out.println("Dvdid:"+dvdid);
 				System.out.println(" Attempting to insert rent");
-				DBstatement.execute("INSERT INTO Rent(startDate, rentDays, returnDate, dvdId, custId) VALUES('"+Current_date+"', "+days+", '"+return_date+"', "+dvdid+", "+custId); 
+				 System.out.println("INSERT INTO Rent(startDate, rentDays, returnDate, dvdId, custId) VALUES('"+Current_date+"', "+days+", '"+return_date+"', "+dvdid+", "+custId+")");
+				DBstatement.execute("INSERT INTO Rent(startDate, rentDays, returnDate, dvdId, custId) VALUES('"+Current_date+"', "+days+", '"+return_date+"', "+dvdid+", "+custId+")"); 
 				System.out.println("Insert complete");
 				
 				}
