@@ -14,20 +14,27 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
+
+
 public class AccDetails extends JFrame implements ActionListener
 {
+	//All the buttons needed for this GUI
 	JButton Details = new JButton("Edit Details");
 	JButton CheckVid = new JButton ("Check Video");
 	JButton newAcc = new JButton("New Account");
 	JButton returnq = new JButton("Return");
-    Container pane = new JPanel();
-	JTextField seacrh = new JTextField();
 	JButton searching = new JButton("Search");
 	JButton save = new JButton("Save");
-	JPanel buttonpanel = new JPanel();
 	JButton Rental = new JButton("Rental History");
+	JButton Delete = new JButton("Delete Customer");
 	
-// Constructor for frame 
+	//Container and any panels need for this GUI
+    Container pane = new JPanel();
+    JPanel buttonpanel = new JPanel();
+    JPanel AccDetpanel = new JPanel();
+    JPanel Accinfo = new JPanel();
+	
+// all the text field needed for this GUI
 	JTextField AccIdField = new JTextField (10);
 	JTextField NameField = new JTextField (10);
 	JTextField PhField = new JTextField (10);
@@ -37,7 +44,19 @@ public class AccDetails extends JFrame implements ActionListener
 	JTextField CountyField = new JTextField (10);
 	JTextField DateField = new JTextField (10);
 	JTextField BranchField = new JTextField (10);
-
+	JTextField seacrh = new JTextField();
+	
+	//all labels needed for this GUI
+	JLabel AccDetails = new JLabel ("  Account Details");
+	JLabel AccId = new JLabel ("  Account ID:");
+	JLabel Name = new JLabel ("  Name:");
+	JLabel PhNum = new JLabel ("  Phone Number:");
+	JLabel Email = new JLabel ("  Email:");
+	JLabel AddLine1 = new JLabel ("  Address Line 1:");
+	JLabel AddLine2 = new JLabel ("  Address Line 2:");
+	JLabel County = new JLabel ("  County:");
+	JLabel DateJoin = new JLabel ("  Date Joined:");
+	JLabel Branch = new JLabel ("  Branch:");
 
 	//To hold the username and password for the database
 	String username,password;
@@ -46,6 +65,7 @@ public class AccDetails extends JFrame implements ActionListener
 	
 	public AccDetails (String myTitle,String user,String pass) 
 	{
+		//code to create the frame
 		super (myTitle);
 		setSize(800,600);
 		setLocationRelativeTo(null);
@@ -62,166 +82,82 @@ public class AccDetails extends JFrame implements ActionListener
 	}
 
 	public Container Pane() 
-        {
+	{
+		pane.setLayout(new BorderLayout());//layout type for the container
+		pane.setBackground(Color.GRAY); //background colour
 		
-		pane.setLayout(new BorderLayout());
-		pane.setBackground(Color.GRAY);
-		
-		JPanel AccDetpanel = new JPanel();
 		AccDetpanel.setBackground(Color.RED);
 		
-		JPanel Accinfo = new JPanel();
 		Accinfo.setLayout(new GridLayout(12,2));
 		Accinfo.setBorder(BorderFactory.createLineBorder(Color.GRAY,30));
 		
-		JPanel RentStatus = new JPanel();
-		RentStatus.setLayout(new GridLayout(1,4));
-		
-		JPanel RentHistory = new JPanel();
-		RentHistory.setBorder(BorderFactory.createLineBorder(Color.GRAY,30));
-		RentHistory.setLayout(new GridLayout(6,0));
-		RentHistory.setBackground(Color.RED);
-		
-		JPanel AmountDue = new JPanel();
-		JPanel Movies = new JPanel();
-		JPanel rentedOn = new JPanel();
-		JPanel returnedOn = new JPanel();
-		
-		JLabel AccDetails = new JLabel ("  Account Details");
 		Font fancyFont = new Font ("Serif",Font.BOLD,24);
 		AccDetails.setFont(fancyFont);
 		
-	
-		JLabel AccId = new JLabel ("  Account ID:");
+		//set the textfields to not editable
 		AccIdField.setEditable(false);
-		JLabel Name = new JLabel ("  Name:");
 		NameField.setEditable(false);
-		JLabel PhNum = new JLabel ("  Phone Number:");
 		PhField.setEditable(false);
-		JLabel Email = new JLabel ("  Email:");
 		EmailField.setEditable(false);
-		JLabel AddLine1 = new JLabel ("  Address Line 1:");
 		Add1Field.setEditable(false);
-		JLabel AddLine2 = new JLabel ("  Address Line 2:");
-		
-		Add2Field.setEditable(false);
-		
-		JLabel County = new JLabel ("  County:");
-		
-		
-		CountyField.setEditable(false);
-		
-		JLabel DateJoin = new JLabel ("  Date Joined:");
-	
+		Add2Field.setEditable(false);		
+		CountyField.setEditable(false);	
 		DateField.setEditable(false);
-		
-		JLabel Branch = new JLabel ("  Branch:");
-	
 		BranchField.setEditable(false);
 		
-		Accinfo.add(seacrh);
-		Accinfo.add(searching);
+		Accinfo.add(seacrh); //add  search textfield
+		Accinfo.add(searching); //add search buttn
 		searching.setToolTipText("Search for Customer by name");
 		
-		Accinfo.add(AccId);
-		Accinfo.add(AccIdField);
+		Accinfo.add(AccId); //add accid label to accinfo panel
+		Accinfo.add(AccIdField); //add accid textfield to accinfo panel
 		
-		Accinfo.add(Name);
-		Accinfo.add(NameField);
+		Accinfo.add(Name); //add Name label to accinfo panel
+		Accinfo.add(NameField);//add Name textfield to accinfo panel
 		
-		Accinfo.add(PhNum);
-		Accinfo.add(PhField);
+		Accinfo.add(PhNum); //add PhNum label to accinfo panel
+		Accinfo.add(PhField);//add PhNum textfield to accinfo panel
 		
-		Accinfo.add(Email);
-		Accinfo.add(EmailField);
+		Accinfo.add(Email); //add Email label to accinfo panel
+		Accinfo.add(EmailField);//add Email textfield to accinfo panel
 		
-		Accinfo.add(AddLine1);
-		Accinfo.add(Add1Field);
+		Accinfo.add(Email); //add AddLine1 label to accinfo panel
+		Accinfo.add(Add1Field);//add Email textfield to accinfo panel
 
-		Accinfo.add(AddLine2);
-		Accinfo.add(Add2Field);
+		Accinfo.add(AddLine2); //add AddLine2 label to accinfo panel
+		Accinfo.add(Add2Field);//add AddLine2 textfield to accinfo panel
 		
-		Accinfo.add(County);
-		Accinfo.add(CountyField);
+		Accinfo.add(County); //add County label to accinfo panel
+		Accinfo.add(CountyField);//add County textfield to accinfo panel
 		
-		Accinfo.add(DateJoin);
-		Accinfo.add(DateField);
+		Accinfo.add(DateJoin); //add DateJoin label to accinfo panel
+		Accinfo.add(DateField);//add DateJoin textfield to accinfo panel
 		
-		Accinfo.add(Branch);
-		Accinfo.add(BranchField);
+		Accinfo.add(Branch); //add Branch label to accinfo panel
+		Accinfo.add(BranchField);//add Branch textfield to accinfo panel
+		
 		Accinfo.add(Rental);
-		
+		Accinfo.add(Delete);
 		
 		buttonpanel.setLayout(new BorderLayout());
 		buttonpanel.add(Details, BorderLayout.WEST);
 		buttonpanel.add(newAcc,BorderLayout.EAST);
-		//buttonpanel.add(Rental,BorderLayout.SOUTH);
 		buttonpanel.add(returnq);
 		
-		
-	
 		Accinfo.add(buttonpanel);
-
-		JLabel RentHis = new JLabel ("Rental History");
-		RentHis.setFont(fancyFont);
-		
-		JLabel Status = new JLabel ("Status:");
-		JTextField StatusField = new JTextField (10);
-		StatusField.setEditable(false);
-		
-		JLabel AmDue = new JLabel ("Amount Due:");
-		JTextField AmDueField = new JTextField (10);
-		AmDueField.setEditable(false);
-		
-		JLabel MovieCheck = new JLabel ("Movies Checked Out:");
-		MovieCheck.setFont(fancyFont);
-		
-		JTextField MovieField = new JTextField();
-		MovieField.setEditable(false);
-		MovieField.setPreferredSize(new Dimension(150,30));
-		
-		
-		JLabel OutDate = new JLabel ("CheckOut Date:");
-		JTextField OutDateField = new JTextField (10);
-		OutDateField.setEditable(false);
-		
-		JLabel InDate = new JLabel ("Return Date:");
-		JTextField InDateField = new JTextField (10);
-		InDateField.setEditable(false);
-		AmountDue.add(Status);
-		AmountDue.add(StatusField);
-		
-		AmountDue.add(AmDue);
-		AmountDue.add(AmDueField);
-		RentStatus.add(AmountDue);
-		
-		Movies.add(MovieField);
-		Movies.add(CheckVid);
-		
-		rentedOn.add(OutDate);
-		rentedOn.add(OutDateField);
-		
-		returnedOn.add(InDate);
-		returnedOn.add(InDateField);
-		
-		RentHistory.add(RentHis);
-		RentHistory.add(RentStatus);
-		RentHistory.add(MovieCheck);
-		RentHistory.add(Movies);
-		RentHistory.add(rentedOn);
-		RentHistory.add(returnedOn);
 		AccDetpanel.add(AccDetails);
-		
 		pane.add(Accinfo, BorderLayout.WEST);
 		pane.add(AccDetpanel,BorderLayout.NORTH);
-		//pane.add(RentHistory, BorderLayout.EAST);
+	
 		searching.addActionListener(this);
 		Details.addActionListener(this);
 		CheckVid.addActionListener(this);
 		newAcc.addActionListener(this);
         returnq.addActionListener(this);
         Rental.addActionListener(this);
-		return pane;
+        Delete.addActionListener(this);
+		
+        return pane;
 	}
 	
 	public void actionPerformed(ActionEvent e) 
@@ -279,6 +215,11 @@ public class AccDetails extends JFrame implements ActionListener
 		{
 			System.out.println("Username:"+username+"	Password:"+password);
 			new RentalHistory("Rental History",username,password,id);
+		}
+		
+		if(fire == Delete)
+		{
+			
 		}
 		
 		if(fire == searching)
