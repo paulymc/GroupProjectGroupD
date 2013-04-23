@@ -11,7 +11,18 @@ public class AddFilm extends JFrame implements ActionListener {
 	JButton cancel = new JButton("Cancel");
 	JButton returnmenu = new JButton("Stock Menu");
 	
-	public AddFilm(String title)
+	JTextField Name1 = new JTextField();
+	JTextField Director1 = new JTextField();
+	JTextField Quantity1 = new JTextField();
+	JTextField rent = new JTextField();
+	JTextField Year = new JTextField();
+	
+
+	
+	//To hold the username and password for the database
+	String username,password;
+	
+	public AddFilm(String title,String user,String pass)
 	{
 		super(title);
 		setSize(800,600);
@@ -21,6 +32,9 @@ public class AddFilm extends JFrame implements ActionListener {
 		setResizable(false);
 		setVisible(true);
 		
+		username = user;
+		password = pass;
+		
 	}
 	
 	public Container AddFilmScreen()
@@ -28,14 +42,10 @@ public class AddFilm extends JFrame implements ActionListener {
 		JLabel name = new JLabel("Name:");
 		JLabel Director = new JLabel("Director:");
 		JLabel QTY = new JLabel("Quantity:");
-		JLabel Genre = new JLabel("Genre:");
-		JLabel ID = new JLabel("ID:");
+		JLabel Genre = new JLabel("Rent:");
+		JLabel Year = new JLabel("Year:");
 		
-		JTextField Name1 = new JTextField();
-		JTextField Director1 = new JTextField();
-		JTextField Quantity1 = new JTextField();
-		JTextField Genre1 = new JTextField();
-		JTextField ID1 = new JTextField();
+
 			
 			//Container Screen = new JPanel();
 		films.setLayout(new BorderLayout());
@@ -55,12 +65,12 @@ public class AddFilm extends JFrame implements ActionListener {
 		
 		info.add(Director);
 		info.add(Director1);
-		info.add(ID);
-		info.add(ID1);
+		info.add(Year);
+		info.add(this.Year);
 		info.add(QTY);
 		info.add(Quantity1);
 		info.add(Genre);
-		info.add(Genre1);
+		info.add(rent);
 		info.add(name);
 		info.add(Name1);
 		info.add(save);
@@ -79,7 +89,14 @@ public class AddFilm extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		if(Event == save)
 		{
+			Model new_St = new Model(username, password);
+			
+			int quant = Integer.parseInt(Quantity1.getText());
+			
+			new_St.NewStock(Name1.getText(),Integer.parseInt(Year.getText()) , Director1.getText(),Integer.parseInt( rent.getText()), quant);	
 			JOptionPane.showMessageDialog(null, "Film Added");
+			
+			
 		}
 		if(Event == cancel)
 		{

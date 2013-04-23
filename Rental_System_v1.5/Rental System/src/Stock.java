@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
@@ -9,26 +11,31 @@ public class Stock extends JFrame implements ActionListener{
 	JLabel name = new JLabel("Name:");
 	JLabel Director = new JLabel("Director:");
 	JLabel QTY = new JLabel("Quantity:");
-	JLabel Genre = new JLabel("Genre:");
-	JLabel ID = new JLabel("ID:");
-	JLabel Search1 = new JLabel("Search:");
+	JLabel Genre = new JLabel("Rent:");
+	JLabel ID = new JLabel("Year:");
+	JLabel Search1 = new JLabel("Id Search:");
 	
 	JTextField Name1 = new JTextField();
 	JTextField Director1 = new JTextField();
 	JTextField Quantity1 = new JTextField();
-	JTextField Genre1 = new JTextField();
-	JTextField ID1 = new JTextField();
+	JTextField rent = new JTextField();
+	JTextField Year = new JTextField();
 	
 	JButton Return = new JButton("Return");
 	JButton searcgx = new JButton("Search");
 	JButton Edit = new JButton("Edit");
-	JButton Add = new JButton("Add");
 	JButton Remove = new JButton("Remove");
 	
 	//Return.setToolTipText("Return to menu screen");
 	JTextField Search = new JTextField();
 	
-	public Stock(String Stock)
+
+	//To hold the username and password for the database
+	String username,password;
+
+	int id;
+	
+	public Stock(String Stock,String user,String pass)
 	{
 		
 		super(Stock);
@@ -39,6 +46,9 @@ public class Stock extends JFrame implements ActionListener{
 		//setJMenuBar(createMenu());
 		setVisible(true);
 		setResizable(false);							//resizing not allowed 
+		
+		username = user;
+		password = pass;
 		
 	}
 	
@@ -63,22 +73,21 @@ public class Stock extends JFrame implements ActionListener{
 		info.add(Director);
 		info.add(Director1);
 		info.add(ID);
-		info.add(ID1);
+		info.add(Year);
 		info.add(QTY);
 		info.add(Quantity1);
 		info.add(Genre);
-		info.add(Genre1);
+		info.add(rent);
 		info.add(name);
 		info.add(Name1);
 		info.add(Edit);
-		info.add(Add);
+
 		info.add(Remove);
 		info.add(Return);
 		
 		//Action Listeners set here 
 		Return.addActionListener(this);
 		searcgx.addActionListener(this);
-		Add.addActionListener(this);
 		Remove.addActionListener(this);
 		Edit.addActionListener(this);
 			
@@ -86,7 +95,6 @@ public class Stock extends JFrame implements ActionListener{
 		Screen.add(StockTitle,BorderLayout.NORTH);
 		Screen.add(info,BorderLayout.CENTER);
 		Return.setToolTipText("Return to menu screen");		
-		Add.setToolTipText("Add new DVD to Stock");
 		Remove.setToolTipText("Remove DVD from Stock");
 		Edit.setToolTipText("Edit Details of DVD in Stock");
 		return Screen;
@@ -104,22 +112,75 @@ public class Stock extends JFrame implements ActionListener{
 		if(Event == searcgx)
 		{
 			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			
+			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			Model St_search = new Model(username,password);
+			//needs work
+			ResultSet cursor = St_search.getMovie(Integer.parseInt(Search.getText()));
+			
+			
+			System.out.println("displaying cursor");
+			try {
+				while(cursor.next())
+				{
+					
+					String name,director;
+						 id = cursor.getInt("stockId");
+						name = cursor.getString("dvdTitle");
+						int year = cursor.getInt("dvdYear"); 
+						director = cursor.getString("dvdDirector");
+						int quant = cursor.getInt("dvdQuant");
+						int rentfee = cursor.getInt("dvdRentFee");
+						System.out.println("Id : "+id+"	Name: "+name+"	year:"+year+" 	director:"+director+"		quantity:"+quant+"		rentfee:"+rentfee);
+						
+						
+						//Films.
+						
+						Name1.setText(name);
+						Director1.setText(director);
+						Quantity1.setText(""+quant);
+						rent.setText(""+rentfee);
+						Year.setText(""+year);
+						
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			System.out.println("closing stock cursor");
+			St_search.closeResultSet();
+			try {
+				cursor.close();
+	
+				System.out.println("successfully closed");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			St_search.closeStm();//closes the statement
+			
+			St_search.closeDB();// closes the database when finished
+			
+			
 		}
 		if(Event == Edit)
 		{
+			Model upStock = new Model(username, password);
 			
+			upStock.UpStockDe(id, Name1.getText(),Integer.parseInt(Year.getText()) , Director1.getText(),Integer.parseInt( rent.getText()), Integer.parseInt(Quantity1.getText()));
 			//Code for Editing the stock implemented here, i.e UPDATE STOCK
 		}
 		if(Event== Remove)
 		{
-			//Code for Removing a stock item implemented here, i.e DELETE STOCK
+			Model delstock = new Model(username, password);
+			
+			delstock.DelStock(id);
+			
 			
 		}
-		if(Event == Add)
-		{
-			//Code for Adding an item to a stock implemented here, i.e INSERT STOCK
-			
-		}
+		
 		
 	}
 }

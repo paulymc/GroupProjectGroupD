@@ -116,11 +116,11 @@ public class GUI extends JFrame implements ActionListener {
 		}
 		if(Event == Account)
 		{	
-			new AccDetails("Account Details",password,username);
+			new AccDetails("Account Details",username,password);
 		}
 		if(Event == Stock)
 		{				
-			new StockSearch("Stock Screen");
+			new StockSearch("Stock Screen",username,password);
 		}
 		if(Event == Reservations)
 		{	

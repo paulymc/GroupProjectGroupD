@@ -23,7 +23,10 @@ public class createAcc extends JFrame implements ActionListener
 	Container pane = new JPanel();
 	JTextField NameField,PhField, EmailField,Add1Field,Add2Field,CountyField,DateField,BranchField;
 	
-	public createAcc (String myTitle) 
+	//To hold the username and password for the database
+		String username,password;
+	
+	public createAcc (String myTitle,String user,String pass) 
 	{
 		super (myTitle);
 		setSize(800,400);
@@ -31,6 +34,10 @@ public class createAcc extends JFrame implements ActionListener
 		setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
 		setContentPane(createPane());
 		setVisible(true);
+		
+
+		username = user;
+		password = pass;
 	}
 	
 	private Container createPane() 
@@ -143,6 +150,10 @@ public void actionPerformed(ActionEvent e) {
 			/*
 				Put the model class call here
 			*/
+			Model n_cust = new Model(username,password);
+			n_cust.NewCust(name, address, Ph_number, email);
+			
+			System.out.println("New customer added to database");
 			
 		}
 		

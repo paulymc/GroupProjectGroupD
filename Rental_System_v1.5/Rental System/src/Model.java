@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.DriverManager;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.lang.ClassNotFoundException;
 
 
@@ -169,18 +172,21 @@ public class Model
 			try{
 			System.out.println("Create new user");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute("CREATE USER " + Un + " IDENTIFIED BY  '" + Pw + "'" ); //Creates the user
+					DBstatement.execute("CREATE USER  '" + Un + "'@'localhost' IDENTIFIED BY  '" + Pw + "'" ); //Creates the user
 					System.out.println("User " + Un + " has been created");
 					if(manager)
 					{
 						//Grants the manager privilages on the account
-						DBstatement.execute("GRANT SELECT, INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON teamp.* TO " + Un + " IDENTIFIED BY '" + Pw + "'");
+						DBstatement.execute("GRANT CREATE USER ON *.* TO '" + Un + "'@'localhost' WITH GRANT OPTION;");
+						DBstatement.execute("GRANT ALL PRIVILEGES ON *.* TO '" + Un + "'@'localhost' IDENTIFIED BY '" + Pw + "'");
 						System.out.println("User " + Un + " has Managerlevel privileges granted");
 					}
 					else
 					{
 						//Grants employee privileges to the user  NOTE: need exact privileges for the DVDManagement system.
-					DBstatement.execute("GRANT SELECT, INSERT,UPDATE,DELETE,CREATE,DROP,ALTER ON teamp.* TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					DBstatement.execute("GRANT SELECT  ON teamp.* TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					DBstatement.execute("GRANT INSERT,UPDATE   ON teamp.rent TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					//DBstatement.execute("GRANT INSERT,UPDATE, DELETE  ON teamp.reservation TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
 					System.out.println("User " + Un + " has Employee level privileges granted");
 					}
 		}	
@@ -412,19 +418,31 @@ public class Model
 		//DVD table
 		
 		//View DVD table details
-		public void getDVD()
+		public String getDVD(int dvdId)
 		{
 		
+			String Dvdname = null;
+			
 			connectDb(); //connect to the database
+			
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Prepair to display all stock");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
+					System.out.println("Executing cursor query");
+					st_details = DBstatement.executeQuery("select  from dvd where dvdState="+dvdId);
+					System.out.println("Attempting output to console");
+					while(st_details.next())
+					{
+						int id = st_details.getInt("stockId");
+						String name = st_details.getString("dvdTitle");
+						System.out.println("Id : "+id+"	Name: "+name);
+					}
+					
+					System.out.println("output complete");
 					//DBstatement.execute("");
-					System.out.println("");
+					System.out.println("Attempting cursor passing");
 			}
 			
 			catch(SQLException error)
@@ -432,11 +450,17 @@ public class Model
 				System.out.println("Error : " +  error.getMessage());
 			}
 			
+			
 			closeStm();//closes the statement
+			
+			closeResultSet();
 			
 			closeDB();// closes the database when finished
 			
+			return Dvdname;
 		}
+		
+		
 		
 		//this updates the state of the DVD
 		public void UpdateDVD(char state)
@@ -556,31 +580,84 @@ public class Model
 			return st_details;
 		}
 		
+		public ResultSet DisplayinStock()
+		{
+		connectDb(); //connect to the database
 		
-		public void getMovie(int stockID) // searchs by id number
+		try
+		{
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("SELECT * FROM Stock JOIN Dvd USING(stockId) WHERE dvdState LIKE 'A'");
+				
+				System.out.println("output complete");
+				
+	
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
+	}
+		
+		public ResultSet Display_od()
+		{
+		connectDb(); //connect to the database
+		
+		try
+		{
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("SELECT * FROM Stock JOIN Dvd USING(stockId) WHERE dvdState LIKE 'O'");
+				
+				System.out.println("output complete");
+				
+	
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
+	}
+		
+		public ResultSet getMovie(int stockID) // searchs by id number
 		{
 			connectDb(); //connect to the database
 			
 			try
-			{
-					System.out.println("");
-					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+			{	
+				
+			System.out.println("Prepair to display all stock");
+			DBstatement = DBconnection.createStatement();
+			System.out.println("Executing cursor query");
+			st_details = DBstatement.executeQuery("select * from Stock where stockId = "+stockID+" ");
+		
+			System.out.println("output complete");
+			//DBstatement.execute("");
+			System.out.println("Attempting cursor passing");
+			
 			}
 			
 			catch(SQLException error)
 			{
 				System.out.println("Error : " +  error.getMessage());
 			}
-			
-			closeStm();//closes the statement
-			
-			closeDB();// closes the database when finished
-			
+			return st_details;
 		}
+		
+		
 		
 		public void getMovie(String name)// searches by Movie name
 		{
@@ -603,24 +680,28 @@ public class Model
 			
 			closeStm();//closes the statement
 			
+			
+			
 			closeDB();// closes the database when finished
 			
 		}
 		
 		//Add to stock
 		
-		public void NewStock()
+		public void NewStock(String d_name,int D_year,String D_director, int rentFee,int qant)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Connecting to database");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					System.out.println("Prepairing to execute database statement");
+					DBstatement.execute("INSERT INTO Stock(dvdYear, dvdTitle,dvdQuant, dvdDirector, dvdrentFee) VALUES("+D_year+",'"+d_name+"',"+qant+",'"+D_director+"', " +rentFee+")"); 
+					
+					newDvd(qant, stock_id(d_name));
+			
+					System.out.println("Successfully completed");
 			}
 			
 			catch(SQLException error)
@@ -633,45 +714,90 @@ public class Model
 			closeDB();// closes the database when finished
 			
 		}
-		
+
+		//new dvd
+				private void newDvd(int quant,int st_id)
+				{
+					
+					connectDb(); //connect to the database
+					
+					try
+					{
+							System.out.println("Connecting to database");
+							DBstatement = DBconnection.createStatement();
+							System.out.println("Prepairing to execute database statement");
+							
+							for(int i=0;i<quant;i++)//this is to put the new stock in the dvd table
+							{
+							DBstatement.execute("INSERT INTO Dvd(dvdState, stockId) VALUES('A',"+st_id+" )"); 
+							}
+							
+							
+							System.out.println("Successfully completed");
+					}
+					
+					catch(SQLException error)
+					{
+						System.out.println("Error : " +  error.getMessage());
+					}
+					
+					closeStm();//closes the statement
+					
+					closeDB();// closes the database when finished
+					
+				}
+				
+				private int stock_id(String name)
+				{
+					int id = 0;
+					
+					connectDb(); //connect to the database
+					
+					try
+					{
+						System.out.println("Prepair to retreve new  stock_id ");
+						DBstatement = DBconnection.createStatement();
+						System.out.println("Executing cursor query");
+						st_details = DBstatement.executeQuery("select * from stock where dvdTitle= '"+name+"'");
+						
+						while(st_details.next())
+						{
+							
+								id = st_details.getInt("stockId");
+								
+								System.out.println("Id : "+id);
+				
+						}
+			
+					} catch (SQLException e2) 
+					
+					{
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					
+					closeResultSet();
+					
+					closeStm();//closes the statement
+					
+					closeDB();// closes the database when finished
+						
+					return id;
+					
+				}
+				
 		//Update Stock details
-		public void UpStockDe()
+		public void UpStockDe(int id,String d_name,int D_year,String D_director, int rentFee,int qant)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("Updating stock details");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
-			}
-			
-			catch(SQLException error)
-			{
-				System.out.println("Error : " +  error.getMessage());
-			}
-			
-			closeStm();//closes the statement
-			
-			closeDB();// closes the database when finished
-			
-		}
-		
-		public void UpQuant(int StockId)//update the quantity of the DVD in stock
-		{
-			connectDb(); //connect to the database
-			
-			try
-			{
-					System.out.println("");
-					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					DBstatement.execute("UPDATE Stock SET dvdYear ="+D_year+",dvdTitle ="+d_name+",dvdQuant = "+qant+",dvdDirector="+D_director+",dvdRentFee="+rentFee+"  WHERE stockId = _stockId; "); 
+					System.out.println("Update complete");
 			}
 			
 			catch(SQLException error)
@@ -686,18 +812,16 @@ public class Model
 		}
 		
 		//delete stock
-		public void DelStock()
+		public void DelStock(int id)
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
+					System.out.println("removing stock.. ");
 					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
+					DBstatement.execute("DELETE FROM Stock WHERE stockId = "+id+""); 
+					System.out.println("successfully removed");
 			}
 			
 			catch(SQLException error)
@@ -714,28 +838,51 @@ public class Model
 		//Rented table
 		
 		//New rent
-		public void RentNew()
+		public void RentNew(int days, int stockId,int custId)
 		{
-			connectDb(); //connect to the database
+			//gets the date
+			Calendar now = Calendar.getInstance();//date
+			String Current_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
 			
-			try
-			{
-					System.out.println("");
-					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
-			}
+			 now.add(Calendar.DATE, days);
 			
-			catch(SQLException error)
-			{
-				System.out.println("Error : " +  error.getMessage());
-			}
+			 String return_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
+			 
+			 
+			 //now to get the dvdid
+			 
+			 int dvdid;
+			 
+			 connectDb();
+			 try
+				{	
+					
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("select * from dvd where stockId = "+stockId+" and dvdState = 'A' ");//works tested on database
 			
-			closeStm();//closes the statement
-			
-			closeDB();// closes the database when finished
+				st_details.next();
+				dvdid = st_details.getInt("dvdId");
+				
+				System.out.println(" Attempting to insert rent");
+				DBstatement.execute("INSERT INTO Rent(startDate, rentDays, returnDate, dvdId, custId) VALUES('"+Current_date+"', "+days+", '"+return_date+"', "+dvdid+", "+custId); 
+				System.out.println("Insert complete");
+				
+				}
+				
+				catch(SQLException error)
+				{
+					System.out.println("Error : " +  error.getMessage());
+				}
+		
+				closeStm();//closes the statement
+				
+				closeDB();// closes the database when finished
+			 
+			 //*****************************************//
+			 
+		
 			
 		}
 		
@@ -765,29 +912,31 @@ public class Model
 			
 		}
 		
-		public void RentHist(int rentID) // displays the rental history of a single id
+		public ResultSet RentHist(int rentID) // displays the rental history of a single id
 		{
 			connectDb(); //connect to the database
 			
 			try
 			{
-					System.out.println("");
-					DBstatement = DBconnection.createStatement();
-					DBstatement.execute(" " ); 
-					System.out.println("");
-					//DBstatement.execute("");
-					System.out.println("");
-			}
-			
-			catch(SQLException error)
-			{
-				System.out.println("Error : " +  error.getMessage());
-			}
-			
-			closeStm();//closes the statement
-			
-			closeDB();// closes the database when finished
-			
+				System.out.println("Prepair to display rental history");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("select * from rent where custId="+rentID);
+				
+				
+				
+				System.out.println("output complete");
+				//DBstatement.execute("");
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
 		}
 		
 		//Returned dvd

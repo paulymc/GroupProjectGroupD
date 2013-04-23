@@ -253,7 +253,7 @@ public class AccDetails extends JFrame implements ActionListener
 		}
 		if(fire == newAcc)
 		{
-			new createAcc("DVD RENTAL");
+			new createAcc("DVD RENTAL",username,password);
 		}
 		if(fire == returnq)
 		{
@@ -277,7 +277,8 @@ public class AccDetails extends JFrame implements ActionListener
 		}
 		if(fire == Rental)
 		{
-			new RentalHistory("Rental History");
+			System.out.println("Username:"+username+"	Password:"+password);
+			new RentalHistory("Rental History",username,password,id);
 		}
 		
 		if(fire == searching)
@@ -307,8 +308,11 @@ public class AccDetails extends JFrame implements ActionListener
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+					
 			dis_cust.closeStm();
+		
 			dis_cust.closeResultSet();
+			
 			dis_cust.closeDB();
 		}
 		
