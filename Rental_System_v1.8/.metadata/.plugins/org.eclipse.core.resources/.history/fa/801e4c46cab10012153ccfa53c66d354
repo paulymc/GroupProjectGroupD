@@ -1,0 +1,996 @@
+/*
+ * Note this is only the alpha version of the model and can only connect to a database so far
+ * While the other methods are only the bare skeleton of the class and do not contain any functioning code 
+ * so far
+ */
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.lang.ClassNotFoundException;
+
+
+public class Model 
+{
+
+	// This is the global user name and password.
+ private String username,password;
+ 
+//These are the connection and sql statements classes and instances.
+	
+		Connection DBconnection = null;
+		Statement DBstatement = null;
+		ResultSet st_details = null;
+		
+	/*constructor: this will run when it is model created and will assign 
+	the username and password to the private variables upon creation of the class*/
+	
+	public Model(String uname, String pass)
+	{
+		username  = uname;
+		password  = pass;
+	}
+
+	 /* The purpose of Pass_check is for the login screen 
+	 * If the Username and password are correct then
+	 * the connection to the database will be successful 
+	 * and true will be returned
+	 * However if a username password is incorrect the database 
+	 * will not be connected to and an error will be thrown.
+	 * This is when the catch statement will return false.
+	 * 
+	 */
+	
+	public Boolean Pass_check()
+	{
+		 try
+			{
+				System.out.println("Connecting to Driver.....");
+				Class.forName("com.mysql.jdbc.Driver"); // this is connecting the java project to the driver Note very important
+				System.out.println("Connection Successful");
+				
+				System.out.println("Connecting to Database: teamp \n password:" + password);
+				
+				DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teamp" , username,password);
+				System.out.println("Connection Successful");
+				
+				closeDB();
+			}
+			catch(ClassNotFoundException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+				//System.out.println("Username or password is incorrect");
+			}
+		  catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+				System.out.println("Username or password is incorrect");
+				return false;
+			}
+		return true;
+	}
+
+	private void connectDb()
+	{
+	  
+	  try
+		{
+			System.out.println("Connecting to Driver.....");
+			Class.forName("com.mysql.jdbc.Driver"); // this is connecting the java project to the driver Note very important
+			System.out.println("Connection Successful");
+			
+			System.out.println("Connecting to Database: Teamp");
+			DBconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teamp" , username,password);
+			System.out.println("Connection Successful");
+			
+		/*	System.out.println("Create dvd table");
+			DBstatement = DBconnection.createStatement();
+			DBstatement.execute("CREATE TABLE teseter(id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, title VARCHAR(25)) ");
+			System.out.println("completed");
+		*/	
+			
+			
+		}
+		catch(ClassNotFoundException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	  catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+	/*	finally // 
+		{
+			
+		}*/	
+	}
+	
+	public void closeDB()
+	{
+		if(DBconnection != null)												//and this closes the DBconnection after it has been used
+		{
+			System.out.println("Closing connection.....");
+	
+			try{	DBconnection.close();}
+				catch(SQLException ignore)
+				{
+					System.out.println("Error : " +  ignore.getMessage());
+				}
+	
+			System.out.println("Connection closed");
+		}
+	}
+	
+	public void closeStm()
+	{
+		//this handles the closing of the connections to the database when finished
+		
+		
+		if(DBstatement != null)     											//this block closes the DBstatement connection if it has been used
+		{
+			System.out.println("Closing statement.....");
+			
+			try{	DBstatement.close();  }
+				catch(SQLException ignore)
+				{
+					System.out.println("Error : " +  ignore.getMessage());
+				}
+			System.out.println("Statement closed");
+		}
+	}
+	
+	public void closeResultSet()
+	{
+		if(st_details != null)     											//this block closes the DBstatement connection if it has been used
+		{
+			System.out.println("Closing Result set.....");
+			
+			try{	st_details.close();  }
+				catch(SQLException ignore)
+				{
+					System.out.println("Error : " +  ignore.getMessage());
+				}
+			System.out.println("Result Set closed");
+		}
+	}
+
+	//Create a new employee 
+	
+	//need to add a new paramiter to this method to
+	//check if the new employee is a manager
+	
+	//addtional tests needed
+		public void NewEmp(String Un,String Pw,Boolean manager)
+		{
+			connectDb(); //connect to the database
+			try{
+			System.out.println("Create new user");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("CREATE USER  '" + Un + "'@'localhost' IDENTIFIED BY  '" + Pw + "'" ); //Creates the user
+					System.out.println("User " + Un + " has been created");
+					if(manager)
+					{
+						//Grants the manager privilages on the account
+						DBstatement.execute("GRANT CREATE USER ON *.* TO '" + Un + "'@'localhost' WITH GRANT OPTION;");
+						DBstatement.execute("GRANT ALL PRIVILEGES ON *.* TO '" + Un + "'@'localhost' IDENTIFIED BY '" + Pw + "'");
+						System.out.println("User " + Un + " has Managerlevel privileges granted");
+					}
+					else
+					{
+						//Grants employee privileges to the user  NOTE: need exact privileges for the DVDManagement system.
+					DBstatement.execute("GRANT SELECT  ON teamp.* TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					DBstatement.execute("GRANT INSERT,UPDATE   ON teamp.rent TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					//DBstatement.execute("GRANT INSERT,UPDATE, DELETE  ON teamp.reservation TO " + Un + " IDENTIFIED BY '" + Pw + "'"); 
+					System.out.println("User " + Un + " has Employee level privileges granted");
+					}
+		}	
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+		}
+	
+		//Remove employee ---not in use right now
+		public void RemoveEmp(String Un)
+{
+			connectDb(); //connect to the database
+			try{
+			System.out.println("Drop user");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" REVOKE ALL PRIVILEGES ON  `codetest` . * FROM  " + Un + " " ); //Revokes the privileges from the user 
+					System.out.println("User " + Un + " has been revokes of privileges");
+					//DBstatement.execute("");
+					System.out.println("User " + Un + " has  been deleted");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+		}
+
+		//update Employee privileges
+		public void UpdateEmp()
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+	
+		//Customer table
+		
+		//Create new customer  //due for testing
+		public void NewCust( String custName, String custAddr, String cusPhone, String cusEmail)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Creating a new Customer account");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("INSERT INTO Customer(custAddr, custName, custPhone, custEmail, dateJoined) VALUES('" + custAddr + "', '" + custName + "', '" + cusPhone + "', '" + cusEmail + "', sysdate());"); 
+					System.out.println("Customer has been successfully created");
+					
+				//the program should querie the database to get the customer id and print it back to the user
+				
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+	
+		//update an existing customer
+		public void UpdateCust(int id, String name, String phone, String email, String addr)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{		System.out.println("About to update the customer details");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Executing statement");
+					
+					DBstatement.execute("UPDATE Customer SET custName = '"+name+"', custAddr = '"+addr+"', custPhone = '"+phone+"', custEmail = '"+email+"' WHERE custId = "+id+";");
+					System.out.println("statement completed successfully");
+					System.out.println("custName = '"+name+"', custAddr = '"+addr+"', custPhone = '"+phone+"', custEmail = '"+email+"' WHERE custId = "+id+";");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		//Delete a customer   // needs to be tested and tided up
+		public void DeleteCust(int custID)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("DELETE FROM Customer WHERE custId = "+ custID +"" ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		//View customer details
+		public void getCust(int custID) //view customer by id
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		public ResultSet getCust(String CustName)// view customer by name -- done
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+			System.out.println("Prepair to display all stock");
+			DBstatement = DBconnection.createStatement();
+			System.out.println("Executing cursor query");
+			st_details = DBstatement.executeQuery("SELECT custName, custPhone, custEmail,custId,custAddr,dateJoined FROM Customer WHERE custName LIKE '%"+CustName+"%'");
+			
+			
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			
+			//closeStm();//closes the statement
+			
+			//closeDB();// closes the database when finished
+			return st_details;
+		}
+		
+		public void getCust()//View all customers 
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+	
+		
+		
+		
+	
+			
+		//DVD table
+		
+		//View DVD table details
+		public String getDVD(int dvdId)
+		{
+		
+			String Dvdname = null;
+			
+			connectDb(); //connect to the database
+			
+			
+			try
+			{
+					System.out.println("Prepair to display all stock");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Executing cursor query");
+					st_details = DBstatement.executeQuery("select  from dvd where dvdState="+dvdId);
+					System.out.println("Attempting output to console");
+					while(st_details.next())
+					{
+						int id = st_details.getInt("stockId");
+						String name = st_details.getString("dvdTitle");
+						System.out.println("Id : "+id+"	Name: "+name);
+					}
+					
+					System.out.println("output complete");
+					//DBstatement.execute("");
+					System.out.println("Attempting cursor passing");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			
+			closeStm();//closes the statement
+			
+			closeResultSet();
+			
+			closeDB();// closes the database when finished
+			
+			return Dvdname;
+		}
+		
+		
+		
+		//this updates the state of the DVD
+		public void UpdateDVD(char state)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+					
+		}
+		
+		//delete DVD
+		public void DeleteDVD(int stockID)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		//returns the number of The dvd that are available to rent in stock
+		public int AvDVDs(int stockID)
+		{
+			int aval = (Integer) null; //  null
+			
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+			
+			return aval;
+		}
+
+		//Stock table
+		
+		//View DvD movie details
+		
+		public ResultSet DisplayStock()
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Prepair to display all stock");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Executing cursor query");
+					st_details = DBstatement.executeQuery("select * from Stock;");
+					/*System.out.println("Attempting output to console");
+					while(st_details.next())
+					{
+						int id = st_details.getInt("stockId");
+						String name = st_details.getString("dvdTitle");
+						System.out.println("Id : "+id+"	Name: "+name);
+					}*/
+					
+					System.out.println("output complete");
+					//DBstatement.execute("");
+					System.out.println("Attempting cursor passing");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+		
+			return st_details;
+		}
+		
+		public ResultSet DisplayinStock()
+		{
+		connectDb(); //connect to the database
+		
+		try
+		{
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("SELECT * FROM Stock JOIN Dvd USING(stockId) WHERE dvdState LIKE 'A'");
+				
+				System.out.println("output complete");
+				
+	
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
+	}
+		
+		public ResultSet Display_od()
+		{
+		connectDb(); //connect to the database
+		
+		try
+		{
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("SELECT * FROM Stock JOIN Dvd USING(stockId), JOIN Rent using(dvdId) WHERE returnDate < sysdate();");
+				
+				System.out.println("output complete");
+				
+	
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
+	}
+		
+		public ResultSet getMovie(int stockID) // searchs by id number
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{	
+				
+			System.out.println("Prepair to display all stock");
+			DBstatement = DBconnection.createStatement();
+			System.out.println("Executing cursor query");
+			st_details = DBstatement.executeQuery("select * from Stock where stockId = "+stockID+" ");
+
+			System.out.println("output complete");
+			//DBstatement.execute("");
+			System.out.println("Attempting cursor passing");
+			
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			return st_details;
+		}
+		
+		
+		
+		public ResultSet getMovie(String dvdName)// searches by Movie name
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					st_details = DBstatement.executeQuery("SELECT stockId, dvdYear, dvdTitle, dvdQuant, dvdDirector, dvdRentFee FROM Stock WHERE dvdTitle LIKE '%"+ dvdName +"%'");
+					//st_details = DBstatement.executeQuery("SELECT * FROM Stock WHERE dvdTitle like '% " + name + "'%;"); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			return st_details;
+			//closeStm();//closes the statement
+			
+			
+			
+			//closeDB();// closes the database when finished
+			
+		}
+		
+		//Add to stock
+		
+		public void NewStock(String d_name,int D_year,String D_director, int rentFee,int quant)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Connecting to database");
+					DBstatement = DBconnection.createStatement();
+					System.out.println("Prepairing to execute database statement");
+					DBstatement.execute("INSERT INTO Stock(dvdYear, dvdTitle,dvdQuant, dvdDirector, dvdrentFee) VALUES("+D_year+",'"+d_name+"',"+quant+",'"+D_director+"', " +rentFee+");"); 
+					
+					newDvd(quant, stock_id(d_name));
+			
+					System.out.println("Successfully completed");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+
+		//new dvd
+				private void newDvd(int quant,int st_id)
+				{
+					
+					connectDb(); //connect to the database
+					
+					try
+					{
+							System.out.println("Connecting to database");
+							DBstatement = DBconnection.createStatement();
+							System.out.println("Prepairing to execute database statement");
+							
+							for(int i=0;i<quant;i++)//this is to put the new stock in the dvd table
+							{
+							DBstatement.execute("INSERT INTO Dvd(dvdState, stockId) VALUES('A'," + st_id + " );"); 
+							}
+							
+							
+							System.out.println("Successfully completed");
+					}
+					
+					catch(SQLException error)
+					{
+						System.out.println("Error : " +  error.getMessage());
+					}
+					
+					closeStm();//closes the statement
+					
+					closeDB();// closes the database when finished
+					
+				}
+				
+				private int stock_id(String name)
+				{
+					int id = 0;
+					
+					connectDb(); //connect to the database
+					
+					try
+					{
+						System.out.println("Prepair to retreve new  stock_id ");
+						DBstatement = DBconnection.createStatement();
+						System.out.println("Executing cursor query");
+						st_details = DBstatement.executeQuery("select * from stock where dvdTitle= '"+name+"'");
+						
+						while(st_details.next())
+						{
+							
+								id = st_details.getInt("stockId");
+								
+								System.out.println("Id : "+id);
+				
+						}
+			
+					} catch (SQLException e2) 
+					
+					{
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					
+					closeResultSet();
+					
+					closeStm();//closes the statement
+					
+					closeDB();// closes the database when finished
+						
+					return id;
+					
+				}
+				
+		//Update Stock details
+		public void UpStockDe(int id,String d_name,int D_year,String D_director, int rentFee,int qant)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("Updating stock details");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("UPDATE Stock SET dvdYear = "+D_year+", dvdTitle ='"+d_name+"',dvdQuant = "+qant+",dvdDirector='"+D_director+"',dvdRentFee="+rentFee+"  WHERE stockId = " + id); 
+					System.out.println("Update complete");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		//delete stock
+		public void DelStock(int id)
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("removing stock.. ");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("DELETE FROM Stock WHERE stockId = "+id+""); 
+					System.out.println("successfully removed");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+
+		//Rented table
+		
+		//New rent
+		public void RentNew(int days, int stockId,int custId)
+		{
+			//gets the date
+			Calendar now = Calendar.getInstance();//date
+			String Current_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
+			
+			 now.add(Calendar.DATE, days);
+			
+			 String return_date =  now.get(Calendar.YEAR) + "-" + (now.get(Calendar.MONTH) + 1) + "-" +now.get(Calendar.DATE);
+			 
+			 
+			 //now to get the dvdid
+			 
+			 int dvdid;
+			 
+			 connectDb();
+			 try
+				{	
+					
+				System.out.println("Prepair to display all stock");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("select * from dvd where stockId = "+stockId+" and dvdState = 'A';");//works tested on database
+			
+				st_details.next();
+				dvdid = st_details.getInt("dvdId");
+				
+				System.out.println(" Attempting to insert rent");
+				DBstatement.execute("INSERT INTO Rent(startDate, rentDays, returnDate, dvdId, custId) VALUES('"+Current_date+"', "+days+", '"+return_date+"', "+dvdid+", "+custId+");"); 
+				System.out.println("Insert complete");
+				
+				}
+				
+				catch(SQLException error)
+				{
+					System.out.println("Error : " +  error.getMessage());
+				}
+		
+				closeStm();//closes the statement
+				
+				closeDB();// closes the database when finished
+			 
+			 //*****************************************//
+			 
+		
+			
+		}
+		
+		//Detailed rents
+		public void RentHist() // displays all the rental history
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		public ResultSet RentHist(int rentID) // displays the rental history of a single id
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+				System.out.println("Prepair to display rental history");
+				DBstatement = DBconnection.createStatement();
+				System.out.println("Executing cursor query");
+				st_details = DBstatement.executeQuery("select * from rent where custId="+rentID);
+				
+				
+				
+				System.out.println("output complete");
+				//DBstatement.execute("");
+				System.out.println("Attempting cursor passing");
+		}
+		
+		catch(SQLException error)
+		{
+			System.out.println("Error : " +  error.getMessage());
+		}
+		
+	
+		return st_details;
+		}
+		
+		//Returned dvd
+		public void Returned(int rentID)
+		{				
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute(" " ); 
+					System.out.println("");
+					//DBstatement.execute("");
+					System.out.println("");
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+		
+		//list all the DVD's that are overdue
+		public void Overdue()
+		{
+			connectDb(); //connect to the database
+			
+			try
+			{
+					System.out.println("I'll show you dvds which are overdue");
+					DBstatement = DBconnection.createStatement();
+					DBstatement.execute("SELECT rentId, custId, dvdId, returnDate FROM STOCK JOIN Dvd USING(stockId) JOIN Rent USING(dvdId) WHERE returnDate < sysdate() ;"); 
+					System.out.println("Overdue dvds are printed");
+					//DBstatement.execute("");
+					System.out.println("");
+					
+			}
+			
+			catch(SQLException error)
+			{
+				System.out.println("Error : " +  error.getMessage());
+			}
+			
+			closeStm();//closes the statement
+			
+			closeDB();// closes the database when finished
+			
+		}
+
+}
