@@ -1,0 +1,281 @@
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.*;
+//this is for the select results
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+public class NewRent extends JFrame implements ActionListener {
+	    Container StockSScreen = new JPanel();
+		JButton Searched = new JButton("Stock list");
+		JButton cancel = new JButton("Cancel");
+		JButton goBack = new JButton("Back");
+		JButton confirm = new JButton("Rent");
+		JButton reserve = new JButton("Reserve");
+		JTextField Days;
+		JButton Display_instock = new JButton("Display dvd's in stock");
+	
+		JList Films = new JList();
+		JScrollPane scroll;
+		
+		//To hold the username and password for the database
+		String username,password;
+		int custId;
+		
+	public NewRent(String s,String user,String pass,int id)
+	{
+		super("StockSearch");
+		setSize(800,600);
+		setLocationRelativeTo(null);
+		setContentPane(StockSearchScreen());
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setJMenuBar(createMenu());
+		setVisible(true);
+		setResizable(false);							//resizing not allowed 
+		username = user;
+		password = pass;
+		custId = id;
+	}
+	
+	public Container StockSearchScreen()
+	{						
+		StockSScreen.setLayout(new GridLayout(4,0));
+		
+		//Font for the title
+		Font newFont = new Font("Aerial",Font.BOLD,32);
+		
+		//Panels for the different parts of the screen.
+		JPanel SearchP = new JPanel();
+		JPanel buttonP = new JPanel();
+		JPanel ResultP = new JPanel();
+	//	ResultP.setLayout(new GridLayout(2,0));
+		SearchP.setLayout(new GridLayout(5,0));
+		
+		//Search text area
+		//JTextField Searching = new JTextField("Input Search");
+		Days = new JTextField("number of days");
+		JLabel title = new JLabel("Rental");
+	
+		title.setFont(newFont);
+	
+		//details.setPreferredSize(new Dimension(20,30));
+		//Results are put into textarea
+		JTextArea results = new JTextArea("Results Displayed here");
+		results.setEditable(false);
+		results.setSize(50,2500);
+		JLabel resultsa = new JLabel();
+		
+		
+		
+		scroll = new JScrollPane(Films);
+		
+		Films.setLayoutOrientation(JList.VERTICAL);
+		Films.setVisibleRowCount(5);
+		
+		Films.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		scroll.setPreferredSize(new Dimension(650,150));
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		results.add(resultsa);
+		
+	//	SearchP.add(Searching);
+		
+		SearchP.add(Searched);
+		SearchP.add(Display_instock);
+		ResultP.add(scroll);
+		ResultP.add(Days);
+		buttonP.add(confirm);
+		buttonP.add(reserve);
+		buttonP.add(goBack);
+		buttonP.add(cancel);
+		
+		
+		//Set the action listeners for the buttons
+		Searched.addActionListener(this);
+		cancel.addActionListener(this);
+		goBack.addActionListener(this);
+		confirm.addActionListener(this);
+		reserve.addActionListener(this);
+		Display_instock.addActionListener(this);
+
+		
+		
+		StockSScreen.add(title);//,BorderLayout.NORTH);
+		StockSScreen.add(SearchP);//,BorderLayout.CENTER);
+		StockSScreen.add(ResultP);//,BorderLayout.CENTER);
+		StockSScreen.add(buttonP);//,BorderLayout.SOUTH);
+
+		
+		return StockSScreen;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		Object Event = e.getSource();
+		
+		if(Event == Searched)
+		{
+			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			Model St_search = new Model(username, password);//calls model passing in username and password for database
+			//needs work
+			ResultSet cursor = St_search.DisplayStock();
+			
+			
+			System.out.println("displaying set of stock");
+			Vector<String> t = new Vector<String>();
+			try {
+				while(cursor.next())
+				{
+				
+				
+					String name,director;
+						int id = cursor.getInt("stockId");
+						name = cursor.getString("dvdTitle");
+						int year = cursor.getInt("dvdYear"); 
+						director = cursor.getString("dvdDirector");
+						int quant = cursor.getInt("dvdQuant");
+						int rentfee = cursor.getInt("dvdRentFee");
+						System.out.println("Id : "+id+"	Name: "+name+"	year:"+year+" 	director:"+director+"		quantity:"+quant+"		rentfee:"+rentfee);
+						
+						System.out.println("testing add to vector t");
+						t.add("Id: "+id+"	    Name: "+name+"   year:  "+year+" 	  director:  "+director+"    quantity:   "+quant+"  rentfee:  "+rentfee);
+						System.out.println("testing after adding to vector t");
+						
+				}
+				System.out.println("testing display");
+				Films.setListData(t);
+				System.out.println("testing after display");
+				
+				System.out.println("closing stock cursor");
+				cursor.close();
+	
+				System.out.println("successfully closed");
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			
+			St_search.closeResultSet();
+			
+			St_search.closeStm();//closes the statement
+			
+			St_search.closeDB();// closes the database when finished
+			
+		}
+		if(Event == cancel)
+		{
+			this.setVisible(false);
+		}
+		
+		if(Event == reserve)
+		{
+			 System.out.println(""+Films.getSelectedValue());
+			 System.out.println("id :"+Films.getSelectedValue().toString().charAt(4));
+			 String ch = ""+Films.getSelectedValue().toString().charAt(4);
+			 
+			 int stockId = Integer.parseInt(ch);
+			 
+			 System.out.println("Stock id:"+stockId);
+			 
+			 Model ren = new Model(username, password);
+			 
+			 
+			 System.out.println("Stock id:"+stockId);
+			 
+			 System.out.println("Attempting to reserve dvd");
+			 ren.ReservNew(stockId,custId);
+			 System.out.println("Reservation completed successfully");
+			 JOptionPane.showMessageDialog(this, "Reservation completed successfully");
+		}
+		
+		if(Event == Display_instock)
+		{
+			//Code for Searching the Stock , i.e SELECT STATEMENT 
+			Model St_search = new Model(username, password);//calls model passing in username and password for database
+			//needs work
+			ResultSet cursor = St_search.DisplayinStock();
+			
+			
+			System.out.println("displaying set of stock");
+			Vector<String> t = new Vector<String>();
+			try {
+				while(cursor.next())
+				{
+				
+					String name,director;
+						int id = cursor.getInt("stockId");
+						name = cursor.getString("dvdTitle");
+						int year = cursor.getInt("dvdYear"); 
+						director = cursor.getString("dvdDirector");
+						int quant = cursor.getInt("dvdQuant");
+						int rentfee = cursor.getInt("dvdRentFee");
+						String state = cursor.getString("dvdState");
+						System.out.println("Id : "+id+"	Name: "+name+"	year:"+year+" 	director:"+director+"		quantity:"+quant+"		rentfee:"+rentfee+"    State :" +state);
+						
+						System.out.println("testing add to vector t");
+						t.add("Id: "+id+"	    Name: "+name+"   year:  "+year+" 	  director:  "+director+"    quantity:   "+quant+"  rentfee:  "+rentfee+"    State :" +state);
+						System.out.println("testing after adding to vector t");
+						
+				}
+				System.out.println("testing display");
+				Films.setListData(t);
+				System.out.println("testing after display");
+				
+				System.out.println("closing stock cursor");
+				cursor.close();
+	
+				System.out.println("successfully closed");
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			
+			St_search.closeResultSet();
+			
+			St_search.closeStm();//closes the statement
+			
+			St_search.closeDB();// closes the database when finished
+			
+		}
+		
+		
+		if(Event == goBack)
+		{
+			this.setVisible(false);
+		}
+		
+		if(Event == confirm)
+		{
+			
+		 int No_days = Integer.parseInt(Days.getText());
+		 System.out.println(""+No_days);
+		 System.out.println(""+Films.getSelectedValue());
+		 System.out.println("id :"+Films.getSelectedValue().toString().charAt(4));
+		 String ch = ""+Films.getSelectedValue().toString().charAt(4);
+		 
+		 int stockId = Integer.parseInt(ch);
+		 
+		 System.out.println("Stock id:"+stockId);
+		 
+		 Model ren = new Model(username, password);
+		 
+		 
+		 System.out.println("Stock id:"+stockId);
+		 
+		 System.out.println("Attempting rent in newrent");
+		 ren.RentNew(No_days,stockId,custId);
+		 System.out.println("Rent successful");
+		 
+		}
+	
+	
+		
+	}
+	
+	
+
+}

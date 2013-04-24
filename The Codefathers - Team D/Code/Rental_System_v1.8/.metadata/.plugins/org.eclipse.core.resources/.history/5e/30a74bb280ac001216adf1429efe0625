@@ -1,0 +1,169 @@
+
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+public class createAcc extends JFrame implements ActionListener
+{
+	JButton Confirm = new JButton("Confirm Details");
+	JButton Cancel = new JButton("Cancel");
+	Container pane = new JPanel();
+	JTextField NameField,PhField, EmailField,Add1Field,Add2Field,CountyField,DateField,BranchField;
+	
+	//To hold the username and password for the database
+		String username,password;
+	
+	public createAcc (String myTitle,String user,String pass) 
+	{
+		super (myTitle);
+		setSize(800,400);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation (WindowConstants.DISPOSE_ON_CLOSE);
+		setContentPane(createPane());
+		setVisible(true);
+		
+
+		username = user;
+		password = pass;
+	}
+	
+	private Container createPane() 
+    {
+	
+	pane.setLayout(new BorderLayout());
+	//pane.setBackground(Color.GRAY);
+	
+	JPanel Accinfo = new JPanel();
+	Accinfo.setLayout(new GridLayout(10,2));
+	Accinfo.setBorder(BorderFactory.createLineBorder(Color.RED,10));
+	
+	JPanel newAcc = new JPanel();
+	newAcc.setBackground(Color.RED);
+	JLabel NewAcc = new JLabel ("  Account Details");
+	Font fancyFont = new Font ("Serif",Font.BOLD,24);
+	NewAcc.setFont(fancyFont);
+	
+	//JLabel AccId = new JLabel ("  Account ID:");
+	//JTextField AccIdField = new JTextField (10);
+	
+	JLabel Name = new JLabel ("  Name:");
+	NameField = new JTextField (10);
+	
+	JLabel PhNum = new JLabel ("  Phone Number:");
+	PhField = new JTextField (10);
+	
+	JLabel Email = new JLabel ("  Email:");
+	 EmailField = new JTextField (10);
+	
+	JLabel AddLine1 = new JLabel ("  Address:");
+	Add1Field = new JTextField (10);
+	
+	//JLabel AddLine2 = new JLabel ("  Address Line 2:");
+	//Add2Field = new JTextField (10);
+	
+	//JLabel County = new JLabel ("  County:");
+	//CountyField = new JTextField (10);
+	
+	//JLabel DateJoin = new JLabel ("  Date Joined:");
+	//DateField = new JTextField (10);
+	
+	//JLabel Branch = new JLabel ("  Branch:");
+	//BranchField = new JTextField (10);
+
+	//Accinfo.add(AccId);
+	//Accinfo.add(AccIdField);
+	
+	Accinfo.add(Name);
+	Accinfo.add(NameField);
+	
+	Accinfo.add(PhNum);
+	Accinfo.add(PhField);
+	
+	Accinfo.add(Email);
+	Accinfo.add(EmailField);
+	
+	Accinfo.add(AddLine1);
+	Accinfo.add(Add1Field);
+
+	/*Accinfo.add(AddLine2);
+	Accinfo.add(Add2Field);
+	
+	Accinfo.add(County);
+	Accinfo.add(CountyField);
+	
+	Accinfo.add(DateJoin);
+	Accinfo.add(DateField);
+	
+	Accinfo.add(Branch);
+	Accinfo.add(BranchField);*/
+	
+	JPanel buttonpanel = new JPanel();
+	buttonpanel.setLayout(new BorderLayout());
+	buttonpanel.add(Confirm, BorderLayout.WEST);
+	buttonpanel.add(Cancel, BorderLayout.EAST);
+	newAcc.add(NewAcc);
+	Accinfo.add(buttonpanel);
+	pane.add(newAcc,BorderLayout.NORTH);
+	pane.add(Accinfo);
+	
+	Confirm.addActionListener(this);
+	Cancel.addActionListener(this);
+	return pane;
+    }
+
+public void actionPerformed(ActionEvent e) {
+		
+		Object fire = e.getSource();
+		
+		if(fire == Confirm)
+		{
+			String name,Ph_number,email,address,County,date_joined,Branch;
+			
+			name = NameField.getText();
+			Ph_number = PhField.getText();
+			email = EmailField.getText();
+			address = Add1Field.getText();
+			
+			System.out.println("Name:" +name);
+			System.out.println("Phone number:" +Ph_number);
+			System.out.println("Email:" + email);
+			System.out.println("Address: " +address);
+
+			/*
+				Put the model class call here
+			*/
+			Model n_cust = new Model(username,password);
+			n_cust.NewCust(name, address, Ph_number, email);
+			
+			System.out.println("New customer added to database");
+			JOptionPane.showMessageDialog(this, "New customer successfuly created.");
+		}
+		
+		if(fire == Cancel)
+		{
+			NameField.setText("");
+			PhField.setText("");
+			EmailField.setText("");
+			Add1Field.setText("");
+			
+			this.setVisible(false);
+			
+			//new AccDetails("DVD Rentel");
+			//setVisible(false);
+		}
+}
+
+}

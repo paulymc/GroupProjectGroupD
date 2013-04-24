@@ -1,0 +1,142 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+//this is for the select results
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
+public class RentalHistory extends JFrame implements ActionListener{
+	
+	Container hist = new JPanel();
+	JList historyr = new JList();
+	JButton returnm = new JButton("Return");
+	JButton n_rent = new JButton(" New Rent");
+
+	
+	//To hold the username and password for the database
+		String username,password;
+		
+		int accountid;
+	
+	public RentalHistory(String title,String user,String pass,int id)
+	{
+		super(title);
+		setSize(800,600);
+		
+		username = user;
+		password = pass;
+		
+		accountid = id;
+		
+		setContentPane(history());
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setVisible(true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Container history()
+	{
+		JLabel header = new JLabel("Rental History");
+		historyr.setLayoutOrientation(JList.VERTICAL);
+		JScrollPane scroll = new JScrollPane(historyr);
+		
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setPreferredSize(new Dimension(650,150));
+		//this is where the model call and the list into the gui will be 
+			
+			Model rent = new Model(username, password);
+			ResultSet result = rent.RentHist(accountid);
+	 
+			Vector<String> t = new Vector<String>();
+			t.add("--------------------------------------Rents----------------------------------------------");
+
+			try {
+					while(result.next())
+					{
+						
+						int id = result.getInt("rentId");
+						int dvdId = result.getInt("dvdId");
+						String dvdTitle = result.getString("dvdTitle");
+						int days = result.getInt("rentDays");
+						Date startdate = result.getDate("startDate");
+						Date enddate = result.getDate("returnDate");
+						System.out.println("Id : "+id+ "	Name: "+ dvdTitle + "   Days:"+days);
+						
+						
+						t.add("Id : "+ id + " DvdId: " + dvdId + " Name: " + dvdTitle + " Start date : " + startdate + " Return date : " + enddate + "   Days:" + days);	
+					}
+				} 
+			catch (SQLException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			t.add("---------------------------------Reservations-----------------------------------------------");
+			ResultSet reservResSet = rent.RentHist(accountid);
+				try {
+						while(reservResSet.next())
+						{
+						
+						int id = result.getInt("reservId");
+						int dvdId = result.getInt("dvdId");
+						String dvdTitle = result.getString("dvdTitle");
+						Date startdate = result.getDate("reservDate");
+						System.out.println("Id : "+id+ "	Name: "+ dvdTitle);
+						
+						
+						t.add("Id : "+ id + " DvdId: " + dvdId + " Name: " + dvdTitle + "Reservation date: " + startdate);	
+						}
+
+				
+				
+				historyr.setListData(t);
+				
+				} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				}
+					
+			rent.closeStm();
+		
+			rent.closeResultSet();
+			
+			rent.closeDB();
+		
+		
+		returnm.addActionListener(this);
+		n_rent.addActionListener(this);
+		
+		
+		hist.add(header);
+		hist.add(scroll);
+		hist.add(returnm);
+		hist.add(n_rent);
+		
+		
+		return hist;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		Object Event = e.getSource();
+		
+		if(Event == returnm)
+		{
+			this.setVisible(false);
+		}
+		
+		if(Event == n_rent)
+		{
+			System.out.println("testing rent");
+			new NewRent("rent", username, password,accountid);
+		}
+				
+	}
+
+}
